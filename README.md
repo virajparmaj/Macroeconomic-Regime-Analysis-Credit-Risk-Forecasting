@@ -44,15 +44,9 @@ This project uses [Poetry](https://python-poetry.org/) for dependency management
 
    ```bash
    poetry init
+   ```
 
-   Here's a **README.md** file for your repository, providing a short tutorial for your collaborators:  
-
----
-
-# **Macroeconomic Regime Analysis & Credit Risk Forecasting**  
-
-Welcome to the **Macroeconomic Regime Analysis & Credit Risk Forecasting** project! 🎯  
-This README will guide new collaborators on **Git setup, contribution workflow, and commit messages**.  
+guide for new collaborators on **Git setup, contribution workflow, and commit messages**.  
 
 ---
 
