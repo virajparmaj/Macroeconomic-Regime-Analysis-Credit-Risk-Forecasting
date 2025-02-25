@@ -17,15 +17,6 @@ from functions import (
     add_interaction_terms
 )
 
-def load_raw_data(filepath=RAW_DATA_PATH):
-    """
-    Load raw macroeconomic + credit risk data from CSV or other sources.
-    """
-    print(f"Loading raw data from {filepath} ...")
-    df = pd.read_csv(filepath, parse_dates=['Date'], index_col='Date')
-    print("Data loaded successfully. Data shape:", df.shape)
-    return df
-
 def preprocess_data(df, outlier_cols=None, winsorize_cols=None, fillna_method='ffill'):
     """
     General data cleaning pipeline: fill missing, handle outliers, etc.
@@ -84,8 +75,7 @@ def pipeline_data_preparation(filepath=RAW_DATA_PATH):
     """
     Complete pipeline: load, clean, feature engineering, EDA, finalize.
     """
-    # 1) Load raw data
-    df = load_raw_data(filepath)
+    # 1) Load data
 
     # 2) Preprocess (outlier removal, winsorization, etc.)
     df = preprocess_data(df, 
