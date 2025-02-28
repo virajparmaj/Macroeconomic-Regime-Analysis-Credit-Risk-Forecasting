@@ -1,4 +1,4 @@
-Date,Consumer Price Index for All Urban Consumers All Items in U.S. City Average_CPIAUCSL,Federal Funds Effective Rate _FEDFUNDS,Industrial Production Total Index_INDPRO,Leading Indicators OECD Reference Series Gross Domestic Product (GDP) Original Series for the Euro Area (19 Countries)EA19LORSGPORGYSAM,Unemployment Rate_UNRATE,University of Michigan Consumer Sentiment_UMCSENT
+Month_End,CPI,FEDFUNDS,Industrial_Production,GDP,Unemployment_Rate,Consumer_Sentiment
 1996-12-01,159.1,5.29,77.3772,1.86627256498311,5.4,96.9
 1997-01-01,159.4,5.25,77.5135,1.95264311049976,5.3,97.4
 1997-02-01,159.7,5.19,78.4255,2.0608764944371,5.2,99.7

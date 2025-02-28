@@ -3,9 +3,9 @@
 # =========================================================
 # File Paths (Adjust to match your folder structure)
 # =========================================================
-MACRO_DATA_PATH = "data/merged_macroeconomic_credit.csv"
-CREDIT_DATA_PATH = "data/credit_spread_monthly_mean.csv"
-MACRO_CREDIT_DATA_PATH = "data/merged_macroeconomic_credit.csv"
+MACRO_CREDIT_DATA_PATH = "../../data/merged_macroeconomic_credit.csv"
+MACRO_DATA_PATH = "../../data/macroeconomic_data_merged.csv"
+CREDIT_DATA_PATH = "../../data/credit_spread_monthly_mean.csv"
 MODEL_CHECKPOINT_DIR = "models/checkpoints/"
 MODEL_FINAL_DIR = "models/final/"
 

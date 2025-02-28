@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 import os
 
-from config import RAW_DATA_PATH
-from functions import (
+from config import MACRO_CREDIT_DATA_PATH
+from utilities.functions import (
     basic_eda,
     plot_correlations,
     remove_outliers_zscore,
@@ -71,7 +71,7 @@ def run_eda(df):
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     plot_correlations(df, columns=numeric_cols, title="Correlation Matrix")
 
-def pipeline_data_preparation(filepath=RAW_DATA_PATH):
+def pipeline_data_preparation(filepath=MACRO_CREDIT_DATA_PATH):
     """
     Complete pipeline: load, clean, feature engineering, EDA, finalize.
     """
