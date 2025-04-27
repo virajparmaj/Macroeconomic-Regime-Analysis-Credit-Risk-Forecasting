@@ -14,10 +14,8 @@ MODEL_FINAL_DIR = "models/final/"
 # =========================================================
 RANDOM_STATE = 42
 TEST_SIZE = 0.2 
-
-# For Clustering (Unsupervised Learning)
-N_CLUSTERS = 3   # 3 economic regimes
-N_COMPONENTS = 2 # For PCA or dimensionality reduction
+N_COMPONENTS = 4
+N_CLUSTERS = 3 
 
 # For Time Series (Dates cover 1996-12-01 to 2022-08-01)
 TRAIN_START_DATE = "1996-12-01"

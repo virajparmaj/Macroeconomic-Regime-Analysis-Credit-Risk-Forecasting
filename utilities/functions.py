@@ -151,6 +151,14 @@ def cluster_data(df, columns, method="kmeans", n_clusters=3, random_state=42):
     df.loc[data_subset.index, "Regime_Label"] = labels
     return labels, model
 
+def evaluate_clustering(X, model, labels, method):
+    """
+    Return silhouette and BIC (if GaussianMixture) for any clustering model.
+    """
+    sil = silhouette_score(X, labels)
+    bic = model.bic(X) if method == "gmm" else None
+    return {"silhouette": sil, "bic": bic}
+
 # ===========================================
 # EDA Helpers
 # ===========================================
