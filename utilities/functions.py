@@ -182,3 +182,29 @@ def basic_eda(df):
     print("Head:\n", df.head())
     print("Description:\n", df.describe())
     print("Missing values:\n", df.isnull().sum())
+    
+# ===========================================
+#  Sequence-building utilities for DL models
+# ===========================================
+from sklearn.preprocessing import StandardScaler
+
+def fit_scaler(train_df, feature_cols):
+    """Fit StandardScaler on training slice (2-D)."""
+    scaler = StandardScaler()
+    scaler.fit(train_df[feature_cols])
+    return scaler
+
+def make_sequences(df, feature_cols, target_col,
+                   seq_len=12, step_ahead=1):
+    """
+    Convert a 2-D dataframe into
+      X: (samples, seq_len, n_features)
+      y: (samples,  step_ahead)
+    """
+    X, y, dates = [], [], []
+    values = df[feature_cols + [target_col]].values
+    for i in range(len(df) - seq_len - step_ahead + 1):
+        X.append(values[i:i+seq_len, :-1])
+        y.append(values[i+seq_len+step_ahead-1, -1])
+        dates.append(df.index[i+seq_len+step_ahead-1])
+    return np.array(X), np.array(y), dates

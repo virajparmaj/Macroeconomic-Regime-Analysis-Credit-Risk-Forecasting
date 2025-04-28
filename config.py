@@ -23,10 +23,10 @@ TRAIN_END_DATE   = "2018-12-31"
 TEST_START_DATE  = "2019-01-01"
 TEST_END_DATE    = "2022-08-01"
 
-# =========================================================
-# Observed Clusters from Unsupervised Learning
-# =========================================================
-# Preliminary analysis suggests 3 distinct clusters, typically:
-#   - Cluster 0: Expansion
-#   - Cluster 1: Mild/Moderate Phase
-#   - Cluster 2: Recession
+# --------------  NEW LINES --------------
+SEQ_LEN          = 12      # months fed to LSTM
+FORECAST_STEPS   = 1       # t + 1 month horizon
+BATCH_SIZE       = 32
+EPOCHS           = 150
+DL_MODEL_DIR     = "models/deep/"
+# ---------------------------------------

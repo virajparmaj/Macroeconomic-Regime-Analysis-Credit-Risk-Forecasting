@@ -10,6 +10,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV, train_test_split
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
+def chronological_split(df, split_date):
+    """Return train_df , test_df based on a cutoff date (inclusive train)."""
+    train_df = df.loc[:split_date].copy()
+    test_df  = df.loc[split_date:].copy()
+    return train_df, test_df
+
 # ===========================================
 # Model Saving/Loading
 # ===========================================
