@@ -1,38 +1,151 @@
-# functions.py
+"""
+Comprehensive utility functions for macroeconomic regime analysis and credit risk modeling.
 
-import pandas as pd
-import numpy as np
+This module provides a wide range of functions for:
+- Data cleaning and preprocessing
+- Feature engineering for time series data
+- Unsupervised learning (PCA, clustering)
+- Statistical analysis and diagnostics
+- Sequence data preparation for deep learning
+- Visualization utilities
+"""
+
 import warnings
+from pathlib import Path
+from typing import List, Optional, Union, Dict, Any, Tuple
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
-from sklearn.mixture import GaussianMixture
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import silhouette_score
-
 from scipy import stats
-from statsmodels.stats.diagnostic import acorr_ljungbox
+from scipy.stats.mstats import winsorize
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+from sklearn.mixture import GaussianMixture
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.stats.diagnostic import acorr_ljungbox
+
+from config import N_COMPONENTS, N_CLUSTERS, RANDOM_STATE
+from utilities.logging_config import get_logger, log_data_info, log_model_info, LogContext, log_function_call
+
+# Initialize module logger
+logger = get_logger(__name__)
+
+# Configure matplotlib for better plotting
+plt.style.use('seaborn-v0_8' if 'seaborn-v0_8' in plt.style.available else 'default')
+warnings.filterwarnings('ignore', category=FutureWarning)
 
 # ===========================================
 # Data Cleaning & Utilities
 # ===========================================
-def remove_outliers_zscore(series, threshold=3):
-    """
-    Remove outliers from a pandas Series based on a Z-score threshold.
-    """
-    mask = abs(stats.zscore(series.dropna())) < threshold
-    return series[mask]
 
-def winsorize_series(series, limits=(0.01, 0.01)):
+@log_function_call
+def remove_outliers_zscore(
+    series: pd.Series,
+    threshold: float = 3.0
+) -> pd.Series:
     """
-    Winsorize a series to limit extreme values.
+    Remove outliers from a pandas Series based on Z-score threshold.
+    
+    This function identifies and removes outliers using the Z-score method,
+    which measures how many standard deviations a data point is from the mean.
+    
+    Args:
+        series: Input pandas Series to process
+        threshold: Z-score threshold for outlier detection (default: 3.0)
+        
+    Returns:
+        Series with outliers removed
+        
+    Raises:
+        ValueError: If series is empty or has no valid data
     """
-    from scipy.stats.mstats import winsorize
-    return winsorize(series, limits=limits)
+    with LogContext("outlier_removal", logger=logger, threshold=threshold):
+        if series.empty:
+            raise ValueError("Input Series is empty")
+        
+        # Drop NaN values for Z-score calculation
+        clean_series = series.dropna()
+        if clean_series.empty:
+            raise ValueError("Series contains only NaN values")
+        
+        initial_length = len(series)
+        
+        # Calculate Z-scores
+        z_scores = np.abs(stats.zscore(clean_series))
+        mask = z_scores < threshold
+        
+        # Apply mask to original series (preserves NaN positions)
+        outlier_mask = series.dropna().index.isin(clean_series[mask].index)
+        result = series[outlier_mask]
+        
+        outliers_removed = initial_length - len(result)
+        
+        logger.info("Outlier removal completed",
+                   initial_length=initial_length,
+                   final_length=len(result),
+                   outliers_removed=outliers_removed,
+                   threshold=threshold,
+                   outlier_percentage=(outliers_removed / initial_length) * 100)
+        
+        return result
+
+@log_function_call
+def winsorize_series(
+    series: pd.Series,
+    limits: Tuple[float, float] = (0.01, 0.01)
+) -> pd.Series:
+    """
+    Winsorize a pandas Series to limit extreme values.
+    
+    Winsorization caps extreme values at specified percentiles,
+    reducing the impact of outliers without completely removing them.
+    
+    Args:
+        series: Input pandas Series to winsorize
+        limits: Tuple of lower and upper percentile limits (default: (0.01, 0.01))
+        
+    Returns:
+        Winsorized Series
+        
+    Raises:
+        ValueError: If series is empty or limits are invalid
+    """
+    with LogContext("winsorization", logger=logger, limits=limits):
+        if series.empty:
+            raise ValueError("Input Series is empty")
+        
+        if not (0 <= limits[0] < limits[1] <= 0.5):
+            raise ValueError("Invalid limits: must be 0 <= lower < upper <= 0.5")
+        
+        initial_stats = {
+            "mean": series.mean(),
+            "std": series.std(),
+            "min": series.min(),
+            "max": series.max()
+        }
+        
+        # Apply winsorization
+        result = winsorize(series, limits=limits)
+        result = pd.Series(result, index=series.index, name=series.name)
+        
+        final_stats = {
+            "mean": result.mean(),
+            "std": result.std(),
+            "min": result.min(),
+            "max": result.max()
+        }
+        
+        logger.info("Series winsorization completed",
+                   initial_stats=initial_stats,
+                   final_stats=final_stats,
+                   limits=limits)
+        
+        return result
 
 def clip_infinities(df, fill_value=0):
     """
@@ -127,29 +240,135 @@ def perform_pca(df, columns, n_components=2, scale=True):
                          index=data_subset.index)
     return pc_df, pca
 
-def cluster_data(df, columns, method="kmeans", n_clusters=3, random_state=42):
+@log_function_call
+def cluster_data(
+    df: pd.DataFrame,
+    columns: List[str],
+    method: str = "kmeans",
+    n_clusters: int = N_CLUSTERS,
+    random_state: int = RANDOM_STATE,
+    scale_data: bool = True,
+    return_labels_only: bool = False
+) -> Union[Tuple[np.ndarray, Any], np.ndarray]:
     """
-    Cluster the data using K-Means or GaussianMixture on specified columns.
-    Returns the cluster labels and the model object.
-    """
-    data_subset = df[columns].dropna()
-    scaler = StandardScaler()
-    data_scaled = scaler.fit_transform(data_subset)
-
-    if method.lower() == "kmeans":
-        model = KMeans(n_clusters=n_clusters, random_state=random_state)
-    elif method.lower() == "gmm":
-        model = GaussianMixture(n_components=n_clusters, random_state=random_state)
-    else:
-        raise ValueError("method must be either 'kmeans' or 'gmm'")
-
-    labels = model.fit_predict(data_scaled)
-    score = silhouette_score(data_scaled, labels)
-    print(f"Clustering method: {method}, Silhouette Score: {score:.3f}")
+    Perform clustering analysis using K-Means or Gaussian Mixture Models.
     
-    # Merge labels back to the main df (only for rows used in clustering)
-    df.loc[data_subset.index, "Regime_Label"] = labels
-    return labels, model
+    This function clusters data using unsupervised learning methods to identify
+    distinct regimes or patterns in the data, commonly used for macroeconomic
+    regime detection.
+    
+    Args:
+        df: Input DataFrame containing the data to cluster
+        columns: List of column names to use for clustering
+        method: Clustering method ('kmeans' or 'gmm')
+        n_clusters: Number of clusters to create
+        random_state: Random state for reproducibility
+        scale_data: Whether to scale data before clustering
+        return_labels_only: Whether to return only labels or both labels and model
+        
+    Returns:
+        If return_labels_only is False: Tuple of (cluster_labels, fitted_model)
+        If return_labels_only is True: Only cluster_labels
+        
+    Raises:
+        ValueError: If method is invalid or columns not found
+    """
+    with LogContext("clustering_analysis", logger=logger,
+                   method=method, n_clusters=n_clusters, columns=columns):
+        
+        # Input validation
+        if method.lower() not in ["kmeans", "gmm"]:
+            raise ValueError("method must be either 'kmeans' or 'gmm'")
+        
+        missing_columns = [col for col in columns if col not in df.columns]
+        if missing_columns:
+            raise ValueError(f"Columns not found in DataFrame: {missing_columns}")
+        
+        logger.info("Starting clustering analysis",
+                   input_shape=df.shape,
+                   method=method,
+                   n_clusters=n_clusters,
+                   columns=columns,
+                   scale_data=scale_data)
+        
+        # Prepare data for clustering
+        data_subset = df[columns].dropna()
+        
+        if data_subset.empty:
+            raise ValueError("No valid data available for clustering after dropping NaNs")
+        
+        logger.info("Data prepared for clustering",
+                   original_shape=df.shape,
+                   clustering_shape=data_subset.shape,
+                   dropped_rows=df.shape[0] - data_subset.shape[0])
+        
+        # Scale data if requested
+        if scale_data:
+            scaler = StandardScaler()
+            data_scaled = scaler.fit_transform(data_subset)
+            logger.info("Data scaled using StandardScaler")
+        else:
+            data_scaled = data_subset.values
+            logger.info("Using unscaled data for clustering")
+        
+        # Initialize and fit clustering model
+        if method.lower() == "kmeans":
+            model = KMeans(
+                n_clusters=n_clusters,
+                random_state=random_state,
+                n_init=10,  # Explicitly set to avoid FutureWarning
+                max_iter=300
+            )
+            logger.info("K-Means model initialized")
+        elif method.lower() == "gmm":
+            model = GaussianMixture(
+                n_components=n_clusters,
+                random_state=random_state,
+                n_init=10,
+                max_iter=300
+            )
+            logger.info("Gaussian Mixture Model initialized")
+        
+        # Fit the model and get labels
+        labels = model.fit_predict(data_scaled)
+        
+        # Calculate clustering quality metrics
+        silhouette_avg = silhouette_score(data_scaled, labels)
+        
+        # Calculate cluster sizes and statistics
+        cluster_sizes = np.bincount(labels)
+        cluster_stats = {
+            "cluster_sizes": cluster_sizes.tolist(),
+            "cluster_percentages": (cluster_sizes / len(labels) * 100).tolist()
+        }
+        
+        # Add method-specific metrics
+        if method.lower() == "gmm":
+            cluster_stats["bic"] = model.bic(data_scaled)
+            cluster_stats["aic"] = model.aic(data_scaled)
+            cluster_stats["converged"] = model.converged_
+        
+        logger.info("Clustering completed successfully",
+                   method=method,
+                   n_clusters=n_clusters,
+                   silhouette_score=silhouette_avg,
+                   cluster_stats=cluster_stats)
+        
+        # Log model information
+        log_model_info(model, f"{method}_clustering", logger)
+        
+        # Add labels to original DataFrame
+        df_result = df.copy()  # Avoid SettingWithCopyWarning
+        df_result.loc[data_subset.index, "Regime_Label"] = labels
+        
+        logger.info("Cluster labels added to DataFrame",
+                   labeled_rows=len(labels),
+                   unlabeled_rows=len(df) - len(labels))
+        
+        if return_labels_only:
+            return labels
+        else:
+            return labels, model
 
 def evaluate_clustering(X, model, labels, method):
     """
@@ -186,7 +405,6 @@ def basic_eda(df):
 # ===========================================
 #  Sequence-building utilities for DL models
 # ===========================================
-from sklearn.preprocessing import StandardScaler
 
 def fit_scaler(train_df, feature_cols):
     """Fit StandardScaler on training slice (2-D)."""
