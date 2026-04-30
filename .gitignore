@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 hi there
 .DS_Store
+notes/
+data/
