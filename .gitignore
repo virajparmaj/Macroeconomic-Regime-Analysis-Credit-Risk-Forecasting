@@ -169,7 +169,69 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-hi there
+
+# macOS / editor metadata
 .DS_Store
+._*
+.idea/
+.vscode/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+.envrc
+secrets/
+.secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*service-account*.json
+*credentials*.json
+
+# Local AI prompts / scratch context
+prompts/
+.prompts/
+propts/
+.propts/
+prompt_logs/
+prompt-runs/
+*prompt*.md
+*prompt*.txt
+*prompt*.json
+*propt*.md
+*propt*.txt
+*propt*.json
+
+# Project data and local notes
 notes/
 data/
+
+# Generated experiment outputs
+results/*
+!results/.gitkeep
+!results/**/
+!results/**/.gitkeep
+outputs/
+artifacts/
+reports/generated/
+
+# ML experiment trackers
+mlruns/
+wandb/
+lightning_logs/
+
+# Generated model artifacts
+*.joblib
+*.pkl
+*.pickle
+*.keras
+*.h5
+*.hdf5
+*.onnx
+*.pt
+*.pth
+*.ckpt
