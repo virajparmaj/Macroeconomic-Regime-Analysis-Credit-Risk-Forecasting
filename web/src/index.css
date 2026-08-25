@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { color-scheme: light; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-feature-settings: 'cv05' 1, 'ss01' 1, 'tnum' 0;
+  }
+  ::selection { @apply bg-signal-soft text-ink; }
+  :focus-visible { @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-paper rounded-sm; }
+}
+
+@layer components {
+  .tabular { font-variant-numeric: tabular-nums; }
+  .rule-t { @apply border-t border-rule; }
+  .eyebrow {
+    @apply text-2xs font-semibold uppercase tracking-[0.14em] text-ink-mute;
+  }
+  .lede { @apply text-lg leading-relaxed text-ink-soft; }
+  .measure { @apply max-w-prose; }
+  .chart-svg text { @apply fill-ink-mute; font-variant-numeric: tabular-nums; }
+  .chart-svg .axis-line { @apply stroke-rule; }
+  .chart-svg .grid-line { @apply stroke-rule; stroke-dasharray: 2 4; }
+}
+
+@keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.rise { animation: riseIn 0.55s cubic-bezier(0.22,0.61,0.36,1) both; }
+@keyframes drawIn { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }

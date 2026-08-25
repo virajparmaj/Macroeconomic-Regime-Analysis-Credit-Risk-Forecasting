@@ -1,0 +1,1 @@
+[{"event":"2001 recession","start":"2001-03","signals":{"spread":12,"sentiment":5,"indpro":1,"unemp":0}},{"event":"2008 recession","start":"2007-12","signals":{"spread":5,"sentiment":19,"indpro":null,"unemp":0}},{"event":"2020 recession","start":"2020-02","signals":{"spread":15,"sentiment":13,"indpro":10,"unemp":null}}]

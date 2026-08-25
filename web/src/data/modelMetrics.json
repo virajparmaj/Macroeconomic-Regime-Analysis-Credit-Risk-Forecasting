@@ -1,0 +1,1 @@
+[{"model":"Random walk","sub":"assume no change","rmse":0.6124,"r2Mean":0.9244,"r2Rw":0.0,"dmP":null},{"model":"Random forest","sub":"macro + spread history","rmse":1.1131,"r2Mean":0.7503,"r2Rw":-2.3037,"dmP":0.0561},{"model":"Random forest","sub":"macro only","rmse":2.4004,"r2Mean":-0.161,"r2Rw":-14.3629,"dmP":0.0}]
