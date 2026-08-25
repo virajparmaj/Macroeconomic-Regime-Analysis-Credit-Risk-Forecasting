@@ -1,0 +1,60 @@
+insight,metric,value,description
+1,macro_r2_calm,0.0743,"R2 of spread change on 6 macro indicators, calm months (n=187)"
+1,macro_r2_stress,0.4987,"R2 of spread change on 6 macro indicators, macro-stress months (n=63)"
+1,macro_r2_ratio,6.71,stress / calm ratio
+1,mean_abs_corr_calm,0.083,"mean |corr| across 6 indicators, calm"
+1,mean_abs_corr_stress,0.362,"mean |corr| across 6 indicators, stress"
+1,stress_share_months,0.252,share of months in the high-spread quartile
+1,stress_share_variance,0.832,share of squared spread-change variation in those months
+1,nber_recall,0.96,share of NBER recession months flagged by the macro-only stress index
+2,granger_spread_to_unemp_p,0.0,"p-value, spread changes Granger-cause unemployment changes"
+2,granger_unemp_to_spread_p,0.1078,"p-value, unemployment changes Granger-cause spread changes"
+2,granger_spread_to_sentiment_p,0.0009,"p-value, spread -> consumer sentiment"
+2,granger_sentiment_to_spread_p,0.2052,"p-value, consumer sentiment -> spread"
+2,xcorr_peak_lag,-1.0,lead k at which mean |corr| peaks; negative = spread moved first
+2,xcorr_peak_value,0.28,mean |corr| across the six indicators at k=-1
+2,mean_abs_corr_spread_first_side,0.097,mean |corr| over k=-6..-1
+2,mean_abs_corr_macro_first_side,0.061,mean |corr| over k=+1..+6
+2,spread_lead_2001_months,12.0,months of warning before the 2001 recession
+2,spread_lead_2008_months,5.0,months of warning before the 2008 recession
+2,spread_lead_2020_months,15.0,months of warning before the 2020 recession
+2,unemployment_lead_months,0.0,"months of warning from unemployment, all three recessions"
+2,macro_leads_spread_count_both_halves,0.0,"of 6 indicators, in each sample half"
+3,rolling_r2_min,0.099,"lowest 60-month rolling R2, May 2008"
+3,rolling_r2_max,0.763,"highest 60-month rolling R2, April 2020"
+3,rolling_r2_mean,0.364,sample mean
+3,spread_move_after_min_pp,13.6,pp the spread widened in the 7 months after May 2008
+3,rolling_r2_corr_lead9,0.325,corr of rolling R2 with the spread 9 months EARLIER
+3,rolling_r2_corr_lag12,-0.262,corr of rolling R2 with the spread 12 months later
+3,supwald_stat,6.11,sup-Wald statistic for a single structural break
+3,supwald_crit_5pct,17.5,approximate Andrews 5% critical value; test does not reject stability
+4,rw_rmse,0.6124,"random-walk RMSE, pp, walk-forward h=1"
+4,rw_r2,0.9244,random-walk R2 against the test-period mean
+4,rf_macro_spread_rmse,1.1131,RF with macro + spread history
+4,rf_macro_spread_r2,0.7503,its R2 against the test-period mean
+4,rf_macro_spread_r2oos,-2.3037,its R2 against the random walk
+4,rf_macro_only_rmse,2.4004,RF macro only
+4,rf_macro_only_r2oos,-14.3629,its R2 against the random walk
+4,rmse_penalty_vs_rw_pct,81.7,"% higher RMSE than the random walk, best model"
+4,dm_p_macro_only,0.0,Diebold-Mariano p vs random walk
+4,macro_only_false_alarm_pred,14.48,"macro-only prediction for Jul 2020, pp"
+4,macro_only_false_alarm_actual,5.12,"actual spread Jul 2020, pp"
+5,auc_spread_only_h1,0.935,"AUC, stress classification 1 month ahead"
+5,auc_spread_only_h3,0.793,"AUC, 3 months ahead"
+5,auc_spread_only_h6,0.656,"AUC, 6 months ahead"
+5,auc_spread_only_h12,0.543,"AUC, 12 months ahead"
+5,auc_macro_only_h12,0.431,"AUC macro-only at 12 months, below a coin flip"
+5,lift_spread_only_h1,4.38,"precision lift over base rate, h=1"
+5,lift_spread_only_h3,2.55,"precision lift over base rate, h=3"
+5,lift_spread_only_h6,1.52,"precision lift over base rate, h=6"
+5,stress_threshold_pp,6.43,top-quartile spread threshold
+6,mar2020_intramonth_range,6.12,"pp, highest minus lowest daily spread in March 2020"
+6,mar2020_range_vs_median,13.6,x the median month's range of 0.45pp
+6,mar2020_rank_by_range,1.0,of 309 months
+6,mar2020_rank_by_mean,43.0,of 309 months
+6,mar2020_mean_pp,7.85,monthly mean spread
+6,mar2020_daily_peak_pp,10.87,"daily peak, 23 March 2020"
+6,mar2020_mean_understates_peak_pct,27.7,% the monthly mean sits below the month's peak
+6,month_end_rmse_improvement_pct,35.0,% lower one-month random-walk RMSE using month-end instead of month-mean
+6,daily_obs,6679.0,daily spread observations available but unused
+6,monthly_obs,309.0,monthly observations actually modelled
