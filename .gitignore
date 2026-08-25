@@ -235,3 +235,15 @@ lightning_logs/
 *.pt
 *.pth
 *.ckpt
+
+# Web front end
+web/node_modules/
+web/dist/
+web/tsconfig.tsbuildinfo
+
+# The broad Python rules above (`lib/`, `data/`, `results/*`) match these web paths
+# too. The site does not build without its data layer or its exported JSON, and the
+# report cites key_numbers.csv.
+!web/src/lib/
+!web/src/data/
+!results/key_numbers.csv
