@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Reveal } from '@/charts/primitives'
 import { RegimeTimeline } from '@/charts/RegimeTimeline'
 import { BenchmarkChart } from '@/charts/BenchmarkChart'
@@ -200,7 +201,76 @@ function Note({ title, children }: { title: string; children: React.ReactNode })
 
 /* -------------------------------------------------------------- findings */
 
+function TakeawayGroup({ icon, title, color, children }: {
+  icon: string; title: string; color: string; children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl border border-rule bg-paper p-5 sm:p-6">
+      <div className="mb-3 flex items-center gap-2.5">
+        <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm ${color}`}>{icon}</span>
+        <h3 className="text-[0.95rem] font-semibold text-ink">{title}</h3>
+      </div>
+      <div className="space-y-3 text-[0.85rem] leading-relaxed text-ink-soft">{children}</div>
+    </div>
+  )
+}
+
+function Takeaways() {
+  return (
+    <Reveal>
+      <div className="mb-14 rounded-2xl border border-rule bg-paper-warm p-6 sm:p-8">
+        <div className="mb-6">
+          <div className="eyebrow mb-2 text-signal">The short version</div>
+          <h3 className="text-[1.25rem] font-bold text-ink sm:text-[1.5rem]">
+            Three things you need to know
+          </h3>
+          <p className="mt-2 max-w-2xl text-[0.88rem] leading-relaxed text-ink-mute">
+            26 years of macro data, one credit spread, and a model that looked great until we asked the right question.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          <TakeawayGroup icon="1" title="The model doesn't beat doing nothing" color="bg-signal-soft text-signal-deep">
+            <p>
+              <strong className="font-semibold text-ink">Just using last month's spread beats the macro model by 82%.</strong>{' '}
+              The model's R² of 0.75 looks good — until you compare it to the right baseline instead of a useless one.
+            </p>
+            <p>
+              Why? Credit spreads move <em>before</em> macro data, not after. The model is predicting the fast thing from the slow thing.
+            </p>
+            <p className="text-2xs text-ink-faint">Findings 1 & 2 below</p>
+          </TakeawayGroup>
+
+          <TakeawayGroup icon="2" title="Macro only matters when it's already bad" color="bg-gold-soft text-gold">
+            <p>
+              <strong className="font-semibold text-ink">In calm times, macro explains 7% of spread moves. In crises, 50%.</strong>{' '}
+              The relationship works like a switch, not a dial — and the model fits <em>worst</em> right before a crisis hits.
+            </p>
+            <p>
+              A single pooled model is mostly learning from months where its inputs carry almost no signal.
+            </p>
+            <p className="text-2xs text-ink-faint">Findings 3 & 4 below</p>
+          </TakeawayGroup>
+
+          <TakeawayGroup icon="3" title="Short-term stress flags work; forecasts don't" color="bg-calm-soft text-calm">
+            <p>
+              <strong className="font-semibold text-ink">"Will credit be stressed in 1–3 months?" is answerable (94% AUC). 12 months out? Coin flip.</strong>{' '}
+              The useful product is a short-horizon warning, not a spread forecast.
+            </p>
+            <p>
+              Also, monthly averaging hid March 2020 — the fastest credit event in 26 years — ranking it 43rd instead of 1st.
+            </p>
+            <p className="text-2xs text-ink-faint">Findings 5 & 6 below</p>
+          </TakeawayGroup>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
+
 function Findings() {
+  const [showDetails, setShowDetails] = useState(false)
+
   return (
     <Section id="findings" className="scroll-mt-14 py-16 sm:py-24">
       <SectionHead
@@ -210,6 +280,24 @@ function Findings() {
         className="mb-4"
       />
 
+      <Takeaways />
+
+      <div className="mb-8 flex items-center gap-4">
+        <button
+          onClick={() => setShowDetails((v) => !v)}
+          className="inline-flex items-center gap-2 rounded-lg border border-rule bg-paper px-4 py-2 text-[0.85rem] font-medium text-ink-soft transition-colors hover:bg-paper-warm hover:text-ink"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden
+               className="shrink-0 transition-transform duration-300 ease-smooth"
+               style={{ transform: showDetails ? 'rotate(45deg)' : 'none' }}>
+            <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          {showDetails ? 'Hide detailed findings' : 'Show detailed findings'}
+        </button>
+        <span className="text-2xs text-ink-faint">Charts, evidence and methodology for each finding</span>
+      </div>
+
+      {showDetails && (<>
       <Insight
         index={1}
         question="Is an R² of 0.81 actually good?"
@@ -438,6 +526,7 @@ function Findings() {
           series remain monthly regardless, so this improves the outcome measure, not the alignment.</>
         }
       />
+      </>)}
     </Section>
   )
 }
