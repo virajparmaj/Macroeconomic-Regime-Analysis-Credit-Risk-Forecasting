@@ -247,3 +247,13 @@ web/tsconfig.tsbuildinfo
 !web/src/lib/
 !web/src/data/
 !results/key_numbers.csv
+
+# Node (generic, in addition to the web/ paths above)
+node_modules/
+*.tsbuildinfo
+
+# Local run logs
+logs/
+
+# Editor / agent local config
+.claude/
