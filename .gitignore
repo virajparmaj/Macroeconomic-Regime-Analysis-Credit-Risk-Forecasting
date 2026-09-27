@@ -241,6 +241,11 @@ web/node_modules/
 web/dist/
 web/tsconfig.tsbuildinfo
 
+# Verified source snapshots required by the research portfolio's evidence links.
+!web/public/evidence/
+!web/public/evidence/**/
+!web/public/evidence/**
+
 # The broad Python rules above (`lib/`, `data/`, `results/*`) match these web paths
 # too. The site does not build without its data layer or its exported JSON, and the
 # report cites key_numbers.csv.
@@ -257,3 +262,15 @@ logs/
 
 # Editor / agent local config
 .claude/
+.codex/
+.agents/
+
+# Local AI usage notes and traces
+ai_usage/
+ai-usage/
+AI_USAGE.local.*
+ai_usage.local.*
+ai-usage.local.*
+
+# Optional isolated presentation-export environment
+.venv-web-evidence/
