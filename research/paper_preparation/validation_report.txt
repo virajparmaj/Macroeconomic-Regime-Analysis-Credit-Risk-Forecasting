@@ -1,0 +1,15 @@
+Validation recorded 2026-09-25
+Working directory: /Users/veerr_89/Work/projects/Macroeconomic-Regime-Analysis-Credit-Risk
+Command: /Users/veerr_89/.venvs/global/bin/python -m pytest -q
+Exit code: 0
+Result: 28 passed, 5 warnings in 3.29s
+
+Warnings: PytestReturnNotNoneWarning in test_logging.py for:
+- test_logging_configuration
+- test_module_imports
+- test_basic_functionality
+- test_error_handling
+- test_file_operations
+These functions returned bool rather than asserting/returning None. Their pass status does not establish that returned values were True. The 23 tests under tests/ were included in this broader run. No new scientific-validity tests were implemented for this documentation task.
+
+Existing diagnostics were reviewed from research/evidence; no final-study forecasting experiments were executed in this step.
