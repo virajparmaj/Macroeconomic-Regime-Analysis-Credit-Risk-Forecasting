@@ -1,0 +1,103 @@
+Completed classification horizon 1
+Completed classification horizon 3
+Completed classification horizon 6
+Completed classification horizon 12
+{
+  "python": "3.11.14",
+  "pandas": "3.0.0",
+  "numpy": "2.4.1",
+  "sklearn": "1.8.0",
+  "input_sha256": {
+    "data/merged_macroeconomic_credit.csv": "28bfb8e5c94a00389f1495c2deefdca7244adffd506a9dd67574b4fbb106aa58",
+    "data/original/ICE BofA US High Yield Index Option-Adjusted Spread_BAMLH0A0HYM2.csv": "20f9a349f7ac4f817b32fc9df099c0c96706c543afc6a06d8be20bf3e6a728d7"
+  },
+  "panel_rows": 309,
+  "start": "1996-12-31 00:00:00",
+  "end": "2022-08-31 00:00:00",
+  "missing_cells": 0,
+  "daily_nonmissing": 6679,
+  "monthly_mean_panel_max_abs_difference": 0.14611111111111086,
+  "panel_matches_forward_filled_mean_max_abs_error": 3.552713678800501e-15,
+  "months_differing_from_observed_daily_mean": 80,
+  "target_reconstruction_max_abs_error": 7.105427357601002e-15,
+  "march_2020": {
+    "mean": 7.854090909090909,
+    "last": 8.77,
+    "max": 10.87,
+    "min": 4.75,
+    "count": 22.0,
+    "range": 6.119999999999999
+  },
+  "march_2020_mean_rank": 43,
+  "march_2020_range_rank": 1,
+  "v2_notebooks": [
+    {
+      "notebook": "00_audit_of_v1.ipynb",
+      "code_cells": 28,
+      "nonempty_code_cells": 28,
+      "cells_with_outputs": 28
+    },
+    {
+      "notebook": "01_data_point_in_time.ipynb",
+      "code_cells": 8,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    },
+    {
+      "notebook": "02_features_and_leakage_tests.ipynb",
+      "code_cells": 8,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    },
+    {
+      "notebook": "03_baselines_first.ipynb",
+      "code_cells": 7,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    },
+    {
+      "notebook": "04_regimes_real_time.ipynb",
+      "code_cells": 8,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    },
+    {
+      "notebook": "05_walk_forward_models.ipynb",
+      "code_cells": 9,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    },
+    {
+      "notebook": "06_results_and_limits.ipynb",
+      "code_cells": 7,
+      "nonempty_code_cells": 0,
+      "cells_with_outputs": 0
+    }
+  ]
+}
+ h  future_label_fix                score             threshold_source   n  positive_months  unknown_future_rows_scored      auc  average_precision
+ 1             False             rf_score full_sample_exploratory_only 164               31                           1 0.935484           0.828553
+ 1             False current_spread_score full_sample_exploratory_only 164               31                           1 0.953917           0.900104
+ 1              True             rf_score full_sample_exploratory_only 163               31                           0 0.935728           0.829031
+ 1              True current_spread_score full_sample_exploratory_only 163               31                           0 0.953812           0.900175
+ 3             False             rf_score full_sample_exploratory_only 164               29                           3 0.792593           0.451514
+ 3             False current_spread_score full_sample_exploratory_only 164               29                           3 0.837803           0.650523
+ 3              True             rf_score full_sample_exploratory_only 161               29                           0 0.793887           0.455026
+ 3              True current_spread_score full_sample_exploratory_only 161               29                           0 0.836991           0.651371
+ 6             False             rf_score full_sample_exploratory_only 164               26                           6 0.656494           0.240249
+ 6             False current_spread_score full_sample_exploratory_only 164               26                           6 0.754738           0.483505
+ 6              True             rf_score full_sample_exploratory_only 158               26                           0 0.659237           0.247817
+ 6              True current_spread_score full_sample_exploratory_only 158               26                           0 0.751166           0.486182
+12             False             rf_score full_sample_exploratory_only 164               20                          12 0.542535           0.156503
+12             False current_spread_score full_sample_exploratory_only 164               20                          12 0.689236           0.260883
+12              True             rf_score full_sample_exploratory_only 152               20                           0 0.530114           0.162623
+12              True current_spread_score full_sample_exploratory_only 152               20                           0 0.670455           0.263267
+origin_start origin_end   n predictor                         target     rmse      mae       r2
+  1996-12-31 2022-07-31 308      mean next_month_observed_daily_mean 0.708289 0.407254 0.925740
+  1996-12-31 2022-07-31 308      last next_month_observed_daily_mean 0.460676 0.276152 0.968586
+  2009-01-31 2022-07-31 163      mean next_month_observed_daily_mean 0.612246 0.377659 0.924450
+  2009-01-31 2022-07-31 163      last next_month_observed_daily_mean 0.422144 0.280968 0.964082
+  1996-12-31 2022-07-31 308      mean    next_month_panel_ffill_mean 0.706339 0.406825 0.926148
+  1996-12-31 2022-07-31 308      last    next_month_panel_ffill_mean 0.457982 0.274785 0.968952
+  2009-01-31 2022-07-31 163      mean    next_month_panel_ffill_mean 0.612416 0.377703 0.924430
+  2009-01-31 2022-07-31 163      last    next_month_panel_ffill_mean 0.421243 0.280453 0.964246

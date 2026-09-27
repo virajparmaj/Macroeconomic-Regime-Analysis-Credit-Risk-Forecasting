@@ -6,5 +6,14 @@ export default defineConfig({
   plugins: [react()],
   base: './',
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
-  build: { outDir: 'dist', assetsInlineLimit: 0 },
+  build: {
+    outDir: 'dist', assetsInlineLimit: 0,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.endsWith('/data/research.json')) return 'research-evidence'
+        },
+      },
+    },
+  },
 })

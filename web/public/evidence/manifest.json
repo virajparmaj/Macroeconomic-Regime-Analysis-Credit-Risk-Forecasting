@@ -1,0 +1,260 @@
+{
+  "exporter": "web/scripts/export_research.py",
+  "exporterSha256": "d2dab412227b9a3371ff3c1e161a215d3c53e469597d4f847961d379400e7a0d",
+  "output": "web/src/data/research.json",
+  "outputSha256": "9e48b1b57cf078ac2c4b7bff65be55df1ebabf167dfa2104765167e8c8ca41ef",
+  "method": "No new fitting. Stored predictions, stored log summaries, corrected diagnostics, and descriptive source aggregation only.",
+  "sources": [
+    {
+      "path": "analysis/fair_eval.py",
+      "sha256": "9b3082fa9260a2fc46fd8c28a7b05d20a79d743f7015cc05c7a6fc90769b1883",
+      "bundled": true
+    },
+    {
+      "path": "analysis/honest_eval.py",
+      "sha256": "f667282aa3469a4120871f261e7b2e4b6771e0f044097171a3ba2491e56a4229",
+      "bundled": true
+    },
+    {
+      "path": "analysis/macro_regime.py",
+      "sha256": "ca1997049cf044a185cc93a4386c9e7df076a0d334b33dfddbb346279bb3d338",
+      "bundled": true
+    },
+    {
+      "path": "data/datamerged_macro_credit_with_regimes.csv",
+      "sha256": "d1afbd5a1ebe98868312943937ec0d6b357fe8f5a12f5254d7a31e7f27ab8ac4",
+      "bundled": true
+    },
+    {
+      "path": "data/merged_macroeconomic_credit.csv",
+      "sha256": "28bfb8e5c94a00389f1495c2deefdca7244adffd506a9dd67574b4fbb106aa58",
+      "bundled": true
+    },
+    {
+      "path": "data/original/ICE BofA US High Yield Index Option-Adjusted Spread_BAMLH0A0HYM2.csv",
+      "sha256": "20f9a349f7ac4f817b32fc9df099c0c96706c543afc6a06d8be20bf3e6a728d7",
+      "bundled": false
+    },
+    {
+      "path": "notebooks/old_work/ Basic ML Time Series Models.ipynb",
+      "sha256": "092780a665f12a9569380d8eb9b9e15b40f8893e42e87bfcbe954c007e33e7d2",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/old_work/Regime detection_Unsupervise_learning.ipynb",
+      "sha256": "a7fa081e016a82b1aad074a90bcb6ff0a22c22ab4f9f3299741dce47bbfba310",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/old_work/lasso_ridge.ipynb",
+      "sha256": "6e18b2889a3d514b9e5f57d8fa4e5c36c8497b55f1982e84f1af0ae1edd588bf",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/old_work/poly_reg.ipynb",
+      "sha256": "0daa8cc8496dec387d7585bbf1faa8e1e92e221dd87c89740324250fc20a7bae",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/v2/00_audit_of_v1.ipynb",
+      "sha256": "12d91c475c56304c530acd7108f57f2e04484bb3f15ea72f60508c06b16bc9c2",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/viraj/p1_models.ipynb",
+      "sha256": "6b2cbd7a081b1826290ac06e5adbf15d4fdca41613008c3fbe12d1ff2bc0eb42",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/viraj/p2_models.ipynb",
+      "sha256": "c3711df41805886eb47c5b1f3746c9480c55e293b1ae011c95633b95f5246e2e",
+      "bundled": true
+    },
+    {
+      "path": "notebooks/viraj/unsupervised.ipynb",
+      "sha256": "832ea18fbc21025bdc5691e55975f56f0d730b41941cd5585cb65705f9f07162",
+      "bundled": true
+    },
+    {
+      "path": "research/EXPERIMENT_PROTOCOL.md",
+      "sha256": "248a1f278fe3a968ccfd7c9971a2b396db51f8a3bb30f8adbdef9cdfa974bcc0",
+      "bundled": true
+    },
+    {
+      "path": "research/RESEARCH_ADVISORY.md",
+      "sha256": "9347e91bf737fe78d98ff04341c918596db0a0639693dd87387ced30c7c2bbce",
+      "bundled": true
+    },
+    {
+      "path": "research/audit_checks.py",
+      "sha256": "c0d4221277b8c47d794afc08af6d856889380ca7c845fbda80572bfcf90b1029",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/aggregation_benchmarks.csv",
+      "sha256": "53d133fba0b8cb58124ed7bdc4b9db93297728a19d0f3ae7588e28069abbaad0",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/audit_checks.log",
+      "sha256": "7190a3ce30c540c3ef2e02f74bfb3efef96eeafdaf500bbab6deeeade3e3756d",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/audit_summary.json",
+      "sha256": "bd453d3156060a2aec13c934aea46e8efd2a576b9e0a43c3e13af4dfcea88841",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/classification_diagnostic_predictions.csv",
+      "sha256": "76c89cb80b1be974c709d530c0bc16efe702851700c66d37d6533caf6dff650d",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/classification_label_diagnostic.csv",
+      "sha256": "27a8cf207406019ce6ba3b64622e6aff0eeca5814dcc3216a2e4fb85ec5cb45a",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/fair_eval.log",
+      "sha256": "7fd864abaf0a29b5401ad74f247c6fcc3954142021e0dbe61335e30361e2af1f",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/honest_eval.log",
+      "sha256": "a39403626115e5b7981e979c6d178e1c902a04237276c9ab3f6a6bdddf6f4033",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/macro_regime.log",
+      "sha256": "6e5f85d7682e4b0e91571f5f3bfc9e242a9617f11e3e4870319dffdd3dddc933",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/macro_stress.csv",
+      "sha256": "d6ffc566429a540040b1b694b84e4dd2c3bb2ee914a52d4f67f2f4df419818ad",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/onset_counts.csv",
+      "sha256": "c2496dc7cc5c5e095c36b06306f1fe48b6f1e44baa32cf5469c661ada934eb19",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/preds_macro+spread_history.csv",
+      "sha256": "cad5e64b4c3784e5eb5492ae82911ee6fdb97396d6d726a6dd6f81ebb50b006b",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/preds_macro_only.csv",
+      "sha256": "bdd4477a462c1798026be19f684fa13c63760fffee56ed45e9db6fb7505fa1e0",
+      "bundled": true
+    },
+    {
+      "path": "research/evidence/target_provenance.csv",
+      "sha256": "e0c4b88082f5653d3dae8ad83bcbe4baa8f53772563fe381f49d459130da7f73",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/00_README.md",
+      "sha256": "6a64fa879543ecbcbaa7aa36c7d85cfe76d19d2d02999122b1daf122138a89a6",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/01_PROJECT_SCOPE.md",
+      "sha256": "1e7b3ea88774e38ec9c3d4cb11ed9e70100522376920233e7922ee716fdd6902",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/02_NOVELTY_AND_LITERATURE.md",
+      "sha256": "2ea72e8b29b8133519b75a5a847ab4f9f9b5ca53da0d85a7d1477f00c6309d12",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/03_DATA_AND_VALIDITY.md",
+      "sha256": "25365e29d4e77e0ed5cb97b0b484be6eb44966e44058a6ecb246eb518615580c",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/04_VERIFIED_FINDINGS.md",
+      "sha256": "816001a485dbac4d246044faba2bd23bb79a4529ebd1228b302478abb123118e",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/05_STUDY_DESIGN.md",
+      "sha256": "7d0c5445ebf54668ed98b433ebc67f4fc598160868b2b032d98f66f1309cd5af",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/06_IMPLEMENTATION_PLAN.md",
+      "sha256": "53e16c6418b06ed7b5456013c055a109c0677f95096d3ecfd130966093fd54dc",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/07_TESTS_AND_VALIDATION.md",
+      "sha256": "b3c093edf95ab3f95d31410c803ab8ffa08054e4164ba157bf008c43ca5d694f",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/08_RESULTS_REGISTER.md",
+      "sha256": "a195e2a3ebde5bb66c7f5e5a433013262362685a634c7396688ee0e686c657f3",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/09_CONCLUSIONS_AND_LIMITATIONS.md",
+      "sha256": "24d7aa0e6c9f4821ef7e56fa13d1192ad88fa7cf03222bb768f5d16dc1deed29",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/10_PAPER_BLUEPRINT.md",
+      "sha256": "a68af40c053ceffb210b38639596fb17495a543f5dd737a62e138eb5c3d7e91d",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/11_REPRODUCIBILITY.md",
+      "sha256": "0c6a7bc861989efdc955d6dfb3f0ae17e8c900b4abb0f261c1854b2265e24e40",
+      "bundled": true
+    },
+    {
+      "path": "research/paper_preparation/validation_report.txt",
+      "sha256": "3c5ce15b580e21394b909dcb892a1135672bea30597b4e96f3df8602115fbb41",
+      "bundled": true
+    },
+    {
+      "path": "src/config_v2.py",
+      "sha256": "f83159e3ee64a7486f82f7229b3597857fd20621be3286075ed0efb3043d5315",
+      "bundled": true
+    },
+    {
+      "path": "src/features.py",
+      "sha256": "2d6a9b12b01fb58f7df4519ef9a11a25d55a1ca106bf5514f3d5509ade2e1a0f",
+      "bundled": true
+    },
+    {
+      "path": "src/metrics.py",
+      "sha256": "8ec6ad92b2c9da1a421c63baeac8aeb03d2ccbe428332a89702f2ccf32553bdc",
+      "bundled": true
+    },
+    {
+      "path": "src/splits.py",
+      "sha256": "1bec3af923331db973d83bed9f64c18847a96465d12f0c603fe06db38dafe454",
+      "bundled": true
+    },
+    {
+      "path": "utilities/data_processing.py",
+      "sha256": "667f3489acfcb0a2b50e860a1b427ee995e20b73f3a916cb5ea8287ae9ae2fa2",
+      "bundled": true
+    },
+    {
+      "path": "utilities/functions.py",
+      "sha256": "ad8f765c9dd0b44ad1b2e399e3ddcb214898026e0e596aa554feefa08d24c0f5",
+      "bundled": true
+    },
+    {
+      "path": "web/EVIDENCE_MAP.md",
+      "sha256": "cdf72f71df4dbcdb870ab05d871ef6c6960e1d763ba60b1adbd13daae0fdef40",
+      "bundled": true
+    }
+  ],
+  "rawDailySource": "Raw daily input is not bundled; the March 2020 observed values used in the detail chart are exported. Full-period daily counts and monthly summaries are verified from the raw source. The final month contains one source observation (2022-08-01)."
+}

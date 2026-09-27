@@ -4,13 +4,13 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 
 export const C = {
-  ink: '#12151A', soft: '#3A424E', mute: '#6B7480', faint: '#9AA3AF',
-  rule: '#E6E7E3', ruleStrong: '#D2D4CE', paper: '#FFFFFF', sunk: '#F4F4F1',
-  signal: '#C8322B', signalSoft: '#F3DEDC', signalDeep: '#8E211C',
-  calm: '#3E7CA6', calmSoft: '#DDE8F0',
-  gold: '#B07D2B', goldSoft: '#F2E7D2',
-  moss: '#4A7C59', mossSoft: '#DFE9E1',
-  violet: '#6B5B95',
+  ink: '#F1F0EB', soft: '#C4C7CA', mute: '#A5AAB0', faint: '#9299A0',
+  rule: '#30363D', ruleStrong: '#4D555F', paper: '#101113', sunk: '#22262B',
+  signal: '#B2A29D', signalSoft: '#2C2524', signalDeep: '#C8B4AD',
+  calm: '#ACB7C1', calmSoft: '#252A30',
+  gold: '#B6BEC8', goldSoft: '#282D34',
+  moss: '#9AAFA5', mossSoft: '#242E29',
+  violet: '#AEA8B8',
 } as const
 
 /** Stable, colour-blind-safe assignment for the six macro indicators. */

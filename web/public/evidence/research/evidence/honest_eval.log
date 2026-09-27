@@ -1,0 +1,13 @@
+=== HONEST WALK-FORWARD (expanding, 14 origins 2009-2022, embargo=3, point-in-time macro, target = spread(t+1)) ===
+                        n  model_RMSE  model_R2  RW_RMSE   RW_R2  R2_oos_vs_RW  DM_stat    DM_p
+setup                                                                                          
+macro_only            163      2.4004   -0.1610   0.6124  0.9244      -14.3629   4.6201  0.0000
+macro+spread_history  163      1.1131    0.7503   0.6124  0.9244       -2.3037   1.9239  0.0561
+
+Reading:
+  model_R2       = R2 against the test-period mean (the number v1 reported)
+  R2_oos_vs_RW   = 1 - SSE(model)/SSE(random walk). Positive = beats "assume no change".
+  DM p           = Diebold-Mariano vs random walk. p<0.05 = difference is significant.
+
+  macro_only             R2 looks like -0.161, but vs the random walk it is -14.363 (WORSE), DM p=0.000
+  macro+spread_history   R2 looks like 0.750, but vs the random walk it is -2.304 (WORSE), DM p=0.056

@@ -1,771 +1,119 @@
-import { useState } from 'react'
-import { Reveal } from '@/charts/primitives'
-import { RegimeTimeline } from '@/charts/RegimeTimeline'
-import { BenchmarkChart } from '@/charts/BenchmarkChart'
-import { LeadLagChart } from '@/charts/LeadLagChart'
-import { WarningChart } from '@/charts/WarningChart'
-import { RegimeSplitChart } from '@/charts/RegimeSplitChart'
-import { HorizonChart } from '@/charts/HorizonChart'
-import { AggregationChart } from '@/charts/AggregationChart'
-import { Insight } from '@/components/Insight'
-import { Disclose, Metric, Nav, Pill, Section, SectionHead } from '@/components/ui'
-import { MACRO_META, MACRO_KEYS, R2_MIN, regimeSplit, timeline } from '@/lib/data'
-import { monthLabel, num } from '@/lib/format'
+import { useEffect, useState, type ReactNode } from 'react'
+import { Nav } from '@/components/ui'
+import { Evidence, Source } from '@/components/Evidence'
+import { FeatureExplorer } from '@/components/FeatureExplorer'
+import { ExperimentExplorer } from '@/components/ExperimentExplorer'
+import { ForecastWorkbench, AggregationComparison, StressClassification } from '@/components/ForecastWorkbench'
+import { ResearchTimeline } from '@/charts/ResearchTimeline'
+import { research, macroMetadata, sourceHref } from '@/lib/research'
 
 const NAV = [
-  { id: 'problem', label: 'Problem' },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'findings', label: 'Findings' },
-  { id: 'method', label: 'Method' },
-  { id: 'limits', label: 'Limits' },
-  { id: 'next', label: 'Next' },
+  {id:'question',label:'01 Question'}, {id:'data',label:'02 Data'},
+  {id:'conditions',label:'03 Conditions'}, {id:'experiments',label:'04 Experiments'},
+  {id:'forecasts',label:'05 Forecasts'}, {id:'findings',label:'06 Findings'},
+  {id:'validity',label:'07 Validity'}, {id:'technical',label:'08 Technical'},
 ]
+const PANEL = 'data/merged_macroeconomic_credit.csv'
+
+function Chapter({id,number,kicker,title,children}: {id:string;number:string;kicker:string;title:string;children:ReactNode}) {
+  return <section id={id} className="chapter"><div className="chapter-heading"><span className="chapter-number">{number}</span><div><div className="eyebrow">{kicker}</div><h2>{title}</h2></div></div><div className="chapter-content">{children}</div></section>
+}
 
 export default function App() {
-  return (
-    <>
-      <a href="#problem" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-ink focus:px-3 focus:py-2 focus:text-2xs focus:text-paper">
-        Skip to content
-      </a>
-      <Nav items={NAV} />
-      <Hero />
-      <Problem />
-      <TimelineSection />
-      <Findings />
-      <Methodology />
-      <Limits />
-      <NextSteps />
-      <Footer />
-    </>
-  )
-}
-
-/* ------------------------------------------------------------------ hero */
-
-function Hero() {
-  return (
-    <header id="top" className="relative overflow-hidden border-b border-rule bg-paper-warm">
-      <div className="mx-auto w-full max-w-content px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20">
-        <Reveal>
-          <div className="mb-6 flex flex-wrap items-center gap-2">
-            <Pill tone="signal">Analytical review</Pill>
-            <Pill>309 months · 1996–2022</Pill>
-            <Pill>US high-yield credit</Pill>
-          </div>
-          <h1 className="max-w-4xl text-[2.1rem] font-bold leading-[1.08] tracking-[-0.028em] text-ink sm:text-[3.2rem]">
-            Can macroeconomic data tell you when credit is about to get expensive?
-          </h1>
-          <p className="lede mt-6 max-w-2xl">
-            I built a model that said yes, with an R² of 0.81. Then I checked it against a benchmark that
-            assumes nothing changes — and the benchmark won. This is what 26 years of data actually
-            supports, and what it does not.
-          </p>
-        </Reveal>
-
-        <Reveal delay={120}>
-          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-rule pt-9 sm:gap-x-10 lg:grid-cols-4">
-            <Metric
-              tone="signal" value="82" unit="%"
-              label="Higher error than doing nothing"
-              note="Best model 1.11pp RMSE against the random walk's 0.61pp."
-            />
-            <Metric
-              tone="gold" value="6.7" unit="×"
-              label="Macro's power in stress vs calm"
-              note="R² of 0.50 in stressed months against 0.07 in calm ones."
-            />
-            <Metric
-              value="3" unit="mo"
-              label="How far ahead anything is predictable"
-              note="Classification AUC falls from 0.94 to 0.54 between 1 and 12 months."
-            />
-            <Metric
-              tone="calm" value="13.6" unit="×"
-              label="March 2020's repricing speed"
-              note="Versus a median month — yet the monthly panel ranks it only 43rd."
-            />
-          </div>
-        </Reveal>
+  const [view,setView] = useState<'summary'|'technical'>('summary')
+  useEffect(() => { document.querySelectorAll<HTMLDetailsElement>('details.technical').forEach(d => { d.open = view === 'technical' }) },[view])
+  return <>
+    <a className="skip-link" href="#question">Skip to research</a>
+    <div className="masthead"><a href="#top" className="wordmark"><span className="brand-mark" aria-hidden="true">M/C</span> ECONOMIC RESEARCH</a><span className="masthead-note">Research portfolio <span> / </span> 1996—2022</span></div>
+    <Nav items={NAV} />
+    <header className="hero" id="top">
+      <picture className="hero-landscape" aria-hidden="true"><source media="(max-width:640px)" srcSet={`${import.meta.env.BASE_URL}images/alpine-research-small.jpg`} /><img src={`${import.meta.env.BASE_URL}images/alpine-research.jpg`} alt="" width="1536" height="1024" fetchPriority="high" /></picture>
+      <div className="hero-topline"><span className="eyebrow"><span className="status-dot" /> Empirical case study / U.S. high-yield credit</span><span className="mono">RESEARCH NOTE 001</span></div>
+      <h1>Macroeconomic Regime Analysis<br/><span>&amp; Credit Spread Forecasting</span></h1>
+      <div className="hero-bottom"><p className="hero-deck">An empirical study of macroeconomic conditions, U.S. high-yield credit spreads, and the limits of forecasting beyond persistence.</p><div className="hero-thesis"><span className="eyebrow">The research question</span><p>What does macroeconomic structure add after we account for what the spread already tells us?</p><a className="text-link" href="#forecasts">Explore the evidence <span>↘</span></a></div></div>
+      <div className="hero-stats">
+        <a href="#data"><strong>309<small> months</small></strong><span>Six macro series, one aggregate spread</span><small>Core panel · Dec 1996–Aug 2022</small></a>
+        <a href="#forecasts"><strong>0.6124<small> pp</small></strong><span>Monthly persistence RMSE</span><small>163 origins · next-month legacy mean</small></a>
+        <a href="#information"><strong>31.22<small>%</small></strong><span>Lower RMSE with latest daily spread</span><small>Same origins and target · exploratory</small></a>
       </div>
     </header>
-  )
-}
-
-/* --------------------------------------------------------------- problem */
-
-function Problem() {
-  return (
-    <Section id="problem" className="scroll-mt-14 py-16 sm:py-24">
-      <div className="grid gap-x-12 gap-y-10 lg:grid-cols-[1.25fr_1fr]">
-        <div>
-          <SectionHead
-            eyebrow="The question"
-            title="Credit spreads are what lenders charge for risk. Can the economy tell you where they go next?"
-          />
-          <div className="measure mt-6 space-y-4 text-[0.94rem] leading-relaxed text-ink-soft">
-            <p>
-              When lenders grow nervous they demand more compensation, and the high-yield spread widens.
-              It is the cleanest publicly available read on credit-market stress, and it moves years
-              before default statistics do. The obvious question is whether the macro economy — inflation,
-              policy rates, output, jobs, sentiment — can tell you where it is heading.
-            </p>
-            <p>
-              This project tested that with six monthly indicators over 26 years, covering the dot-com
-              bust, the global financial crisis, the post-crisis calm and COVID. The original modelling
-              reported an R² of 0.81 and called it a success.
-            </p>
-            <p className="border-l-2 border-signal pl-4 text-ink">
-              The review below started from a simpler question: <strong className="font-semibold">compared
-              to what?</strong> That one question changed every conclusion.
-            </p>
-          </div>
+    <main>
+      <div className="reading-toolbar"><span className="eyebrow">Read the argument. Inspect the evidence.</span><div className="segmented" aria-label="Reading detail"><button aria-pressed={view === 'summary'} onClick={() => setView('summary')}>Summary view</button><button aria-pressed={view === 'technical'} onClick={() => setView('technical')}>Technical view</button></div></div>
+      <details className="brief" id="brief"><summary><span><span className="eyebrow">Start here</span><b>The 60-second hiring-manager view</b></span><span aria-hidden="true">↗</span></summary><div className="brief-body">
+        <ol><li><b>Question.</b> Can macroeconomic conditions and statistical regimes improve forecasts of an aggregate high-yield credit spread beyond persistence?</li><li><b>Data.</b> A 309-month panel with six macro variables and BAMLH0A0HYM2; 6,679 observed daily spread values reveal what monthly aggregation compresses.</li><li><b>Methods.</b> Feature engineering, historical HMM/PCA/clustering, regression and sequence models, then walk-forward benchmarks and corrected stress diagnostics.</li><li><b>Strongest results.</b> Five reproduced learned specifications lose to monthly persistence on 163 origins. Using the latest daily spread reduces benchmark RMSE by 31.22% on the same legacy target. Current spread ranks future stress above RF at all four inspected horizons.</li><li><b>Judgment.</b> The original high fit is affected by target leakage. Revised macro data, retrospective regimes and three frozen-threshold stress entries limit interpretation. A matched regime-ablation study remains pending.</li></ol>
+        <a className="text-link" href="#technical">Follow the sources and reproduction path ↘</a>
+      </div></details>
+      <Chapter id="question" number="01" kicker="Question" title="Useful prediction has to clear a credible benchmark.">
+        <div className="split-copy"><p className="section-lede">Credit spreads summarize compensation demanded in a risky bond market. The research asks whether macroeconomic conditions help explain their behavior—and whether that relationship survives a forecasting test.</p><div><p>The target is <code>Credit_Spread</code>: the ICE BofA U.S. High Yield Index Option-Adjusted Spread, FRED series <code>BAMLH0A0HYM2</code>. It is an aggregate credit-market risk indicator.</p><p>Useful predictive value means lower out-of-sample error than a named benchmark, on the same target, dates and information set. Regime membership alone is not evidence of forecasting value.</p></div></div>
+        <div className="scope-line"><b>Scope</b><p>Credit-market pricing. No borrower default probabilities, consumer credit scores, loan approvals, realized credit-loss forecasts, portfolio VaR or expected-loss estimates.</p></div>
+        <p className="proposed"><span className="badge">Pending study</span> Give models and benchmarks the same latest spread information, then test whether regime features add predictive value.</p>
+      </Chapter>
+      <Chapter id="data" number="02" kicker="Data & provenance" title="One panel. Several processing stages.">
+        <p className="section-lede">Dataset dimensions belong to artifacts, not to the project as a whole.</p>
+        <div className="table-wrap"><table><caption>Verified stored stages</caption><thead><tr><th>Artifact</th><th>Dimensions</th><th>What it contains</th></tr></thead><tbody>
+          <tr><th><Source path={PANEL}>Core monthly panel</Source></th><td>309 × 8</td><td>Six macro variables, spread target and date; Dec 1996–Aug 2022. No missing stored cells.</td></tr>
+          <tr><th><Source path="notebooks/viraj/p1_models.ipynb">Phase 1 stored feature output</Source></th><td>306 × 23</td><td>Indexed notebook frame after historical feature construction. Current helper defaults produce a different feature set.</td></tr>
+          <tr><th><Source path="data/datamerged_macro_credit_with_regimes.csv">Regime-enriched panel</Source></th><td>309 × 21</td><td>Date, core variables, hard label, ten GMM probabilities, smoothed label and analyst name.</td></tr>
+          <tr><th><Source path="research/evidence/audit_summary.json">Underlying daily spread</Source></th><td>6,679 observed</td><td>83 missing source rows among 6,762; Dec 31, 1996–Aug 1, 2022.</td></tr>
+        </tbody></table></div>
+        <details className="technical"><summary>Source dictionary: six macro variables</summary><div className="technical-body table-wrap"><table><caption>Code names preserved; economic labels corrected</caption><thead><tr><th>Code</th><th>Economic meaning</th><th>Source series</th><th>Units / assumed lag</th></tr></thead><tbody>{macroMetadata.map(m => <tr key={m.key}><th><code>{m.key}</code></th><td>{m.label}</td><td><a href={`https://fred.stlouisfed.org/series/${m.source}`} target="_blank" rel="noreferrer">{m.source} ↗</a></td><td>{m.unit} / {m.lagMonths} months</td></tr>)}</tbody></table><p className="source-note">Lags describe the later evaluation’s publication-lag approximations, applied to revised data. They are not verified vintage-specific availability. The GDP column is Euro Area 19, never U.S. GDP.</p></div></details>
+        <div className="research-grid aggregation-definitions"><div><span className="badge">Target A / legacy</span><h3>Forward-filled source-date mean</h3><p>The original workflow fills missing values on the dates present in the daily file, then averages by month. It does not create a full calendar-day grid.</p></div><div><span className="badge">Target B / reconstructed</span><h3>Observed-day-only mean</h3><p>A separate reconstruction averages only nonmissing daily observations. It differs from the legacy mean in <b>{research.meta.audit.differingMonths} months</b>, by up to <b>{(research.meta.audit.maxDifferencePp*100).toFixed(2)} basis points</b>.</p></div></div>
+        <p className="callout">Spread levels, MAE and RMSE use percentage points (pp); MSE uses pp². <b>1 pp = 100 basis points.</b> August 2022 is a partial month: the daily source stops on August 1. Complete stored cells do not establish real-time completeness.</p>
+        <Evidence source={['research/evidence/audit_summary.json','research/evidence/target_provenance.csv',PANEL]} target="Legacy and observed-day monthly spread means, separately defined" dates="Dec 1996–Aug 2022" n="309 months / 6,679 observed daily values" />
+      </Chapter>
+      <Chapter id="conditions" number="03" kicker="Macro conditions" title="Read the cycle without conflating its definitions.">
+        <p className="section-lede">Explore the spread alongside one macro series. Separate panels preserve each variable’s units; overlays describe different statistical or economic reference states.</p>
+        <ResearchTimeline />
+        <details className="technical"><summary>Three regime concepts—and a recession reference</summary><div className="technical-body definition-grid">
+          <article><span className="eyebrow">A / Historical unsupervised</span><h3>Clusters describe a statistical partition.</h3><p>Earlier work explored HMMs. The later workflow standardized macro inputs, explored PCA and Kernel PCA, compared K-Means and mixtures, and selected K-Means with k=10. It then explicitly refit a ten-component GMM to obtain soft membership probabilities.</p><p>GMM labels and probabilities in the saved CSV come from that refit. K-Means does not generate native probabilities. Full-sample preprocessing and centered three-month smoothing make these retrospective. Economic names are analyst interpretations; cluster IDs are the default.</p><Source path="notebooks/viraj/unsupervised.ipynb">Frozen regime workflow</Source></article>
+          <article><span className="eyebrow">B / Macro-only stress</span><h3>A different construction, with different limits.</h3><p>Unemployment above its trailing 12-month minimum; negative industrial-production year-over-year growth; negative consumer-sentiment trailing 60-month z-score; and negative Euro-area GDP reference value.</p><p>Each component is standardized over the full available sample, then averaged. Values at or above its upper-quartile threshold are flagged. Spreads are not inputs, but full-sample scaling and the threshold remain retrospective.</p><Source path="analysis/macro_regime.py">Index construction</Source></article>
+          <article><span className="eyebrow">C / Spread-defined stress</span><h3>The market variable defines its own state.</h3><p>The full-sample legacy spread’s 75th percentile defines the exploratory high-spread state. This conditions directly on the spread; it is not a macro regime or a recession designation.</p><p>NBER reference periods are separate historical date bands. Cluster membership, macro stress, high spreads, recession and entry into a new stress episode are distinct concepts.</p><Source path="research/audit_checks.py">Stress diagnostics</Source></article>
+        </div></details>
+      </Chapter>
+      <Chapter id="experiments" number="04" kicker="Features & experiments" title="Follow the construction before trusting the fit.">
+        <p className="section-lede">The project spans explicit features, statistical regimes, classical regressions and sequence models. Their targets, features and validation procedures differ.</p>
+        <FeatureExplorer />
+        <div className="leakage-note"><span className="eyebrow">A finding that changes the interpretation</span><h3>The current target can be reconstructed exactly.</h3><code className="formula">Credit_Spread(t) = 3 × Credit_Spread_rollmean3(t)<br/>− Credit_Spread_lag1(t) − Credit_Spread_lag2(t)</code><p>The historical three-month mean includes the current observation. Together with two lags, it exposes the contemporaneous target. The current spread × FEDFUNDS interaction also exposes it when the rate is nonzero.</p><p>This differs from using an available spread at time t to forecast t+1: that can be valid under explicit availability assumptions.</p><details className="technical"><summary>The future-target naming defect is a code-drift risk</summary><div className="technical-body"><p>The frozen Phase 1 frame contains <code>Target</code>, and the model excludes that column. Current helpers create <code>Target_1step_ahead</code>; the old exclusion would miss it if reused. The evidence proves rolling-feature leakage in the stored run, not that this renamed future target was used in that run.</p><Source path="src/features.py">Corrected feature helpers</Source></div></details><Evidence source={['research/evidence/audit_summary.json','notebooks/v2/00_audit_of_v1.ipynb','utilities/functions.py']} target="Contemporaneous Credit_Spread(t)" dates="Historical Phase 1 feature sample, Feb 1997–Jul 2022" n="306 feature rows" horizon="Same-month target reconstruction" benchmark="Algebraic identity; not forecast performance" status="Verified leakage diagnosis" /></div>
+        <ExperimentExplorer technical={view === 'technical'} />
+      </Chapter>
+      <Chapter id="forecasts" number="05" kicker="Forecasts & benchmarks" title="The benchmark is part of the research design.">
+        <ForecastWorkbench />
+        <div id="information"><AggregationComparison /></div>
+        <StressClassification />
+      </Chapter>
+      <Chapter id="findings" number="06" kicker="Supported findings" title="What the evidence supports today.">
+        <div className="findings-list">
+          <Finding n="01" metric="5 / 5" label="learned specifications lose" title="Persistence is a demanding baseline." body="The reproduced RF level, RF change and Ridge change specifications all have higher RMSE on the inspected 163 origins. This is a conclusion about these specifications and this evaluation." source="research/paper_preparation/04_VERIFIED_FINDINGS.md" href="#forecasts" />
+          <Finding n="02" metric="31.22%" label="lower benchmark RMSE" title="The origin’s information matters." body="Latest daily spread improves on the previous monthly mean for the same next-month legacy target and origins. A matched comparison giving models that endpoint information is still pending." source="research/evidence/aggregation_benchmarks.csv" href="#information" />
+          <Finding n="03" metric="4 / 4" label="horizons favor current spread" title="The simple ranking remains competitive." body="Current spread has higher AUC and average precision than RF after unknown future outcomes are excluded. This full-sample-threshold diagnostic does not establish crisis-warning performance." source="research/evidence/classification_label_diagnostic.csv" href="#forecasts" />
+          <Finding n="04" metric="80" label="monthly definitions differ" title="Aggregation is a modeling choice." body="Observed-day and legacy forward-filled means differ in 80 of 309 months, by up to 14.61 bp. March 2020’s 6.12 pp range describes within-month dispersion." source="research/evidence/target_provenance.csv" href="#data" />
+          <Finding n="05" metric="3" label="frozen-threshold entries" title="Many months do not mean many events." body="September 2011, January 2016 and March 2020 are the three post-2008 entries under the threshold frozen through 2008. Event forecasting and its uncertainty are unfinished." source="research/evidence/onset_counts.csv" href="#validity" />
         </div>
-
-        <aside className="rounded-xl border border-rule bg-paper-warm p-6">
-          <div className="eyebrow mb-4">What is in the data</div>
-          <dl className="space-y-3.5">
-            <div className="border-b border-rule pb-3.5">
-              <dt className="text-[0.82rem] font-semibold text-ink">Outcome · Credit spread</dt>
-              <dd className="mt-1 text-2xs leading-relaxed text-ink-mute">
-                ICE BofA US High Yield option-adjusted spread (BAMLH0A0HYM2), monthly mean of daily
-                observations. 309 months, Dec 1996 – Aug 2022.
-              </dd>
-            </div>
-            {MACRO_KEYS.map((k) => (
-              <div key={k} className="flex items-baseline justify-between gap-3">
-                <dt className="text-2xs text-ink-soft">{MACRO_META[k].label}</dt>
-                <dd className="shrink-0 font-mono text-2xs text-ink-faint">{MACRO_META[k].source}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="mt-5 rounded-md border border-gold/25 bg-gold-soft/45 p-3">
-            <div className="text-2xs font-semibold text-gold">One label worth correcting</div>
-            <p className="mt-1 text-2xs leading-relaxed text-ink-soft">
-              The column named <span className="font-mono">GDP</span> is actually{' '}
-              <span className="font-mono">EA19LORSGPORGYSAM</span> — an OECD reference series for{' '}
-              <strong className="font-semibold">Euro Area</strong> GDP, interpolated monthly from quarterly
-              data. Not US GDP, and one of the strongest correlates in the panel.
-            </p>
-          </div>
-        </aside>
-      </div>
-    </Section>
-  )
-}
-
-/* -------------------------------------------------------------- timeline */
-
-function TimelineSection() {
-  const stressMonths = timeline.filter((t) => t.regime === 'stress').length
-  return (
-    <Section id="timeline" tone="sunk" className="scroll-mt-14 border-y border-rule py-16 sm:py-24">
-      <SectionHead
-        eyebrow="The whole sample in one view"
-        title="Twenty-six years, three crises, and a relationship that keeps moving"
-        lede="Before any individual finding, this is the shape of the problem. The spread is stable for years at a time, then repricing violently — and the strength of its link to the macro economy is not constant either."
-      />
-      <Reveal className="mt-10">
-        <div className="rounded-xl border border-rule bg-paper p-5 sm:p-7">
-          <RegimeTimeline />
+        <p className="source-note">Forecast findings use Jan 2009–Jul 2022 origins and the next-month legacy target unless a horizon is stated. Their full units, dates, counts, thresholds and evidence status appear in the linked result sections.</p>
+      </Chapter>
+      <Chapter id="validity" number="07" kicker="Validity & limitations" title="The boundaries are part of the result.">
+        <div className="limitations">
+          <article><span>01</span><h3>Target leakage</h3><p>Contemporaneous target-derived features invalidate a future-forecast interpretation of the original high fit. Corrected helpers are not proof that the final study ran.</p></article>
+          <article><span>02</span><h3>Availability & revisions</h3><p>Publication-lag approximations use revised macro data. Historical vintages, live endpoint availability and the partial final month remain limitations.</p></article>
+          <article><span>03</span><h3>Retrospective regimes</h3><p>Full-sample scaling, clustering, thresholds and centered smoothing look beyond individual historical forecast origins.</p></article>
+          <article><span>04</span><h3>Few observations, fewer events</h3><p>309 months and only three frozen-threshold entries limit what can be learned. Serial dependence and overlapping outcomes require suitable uncertainty estimates.</p></article>
+          <article><span>05</span><h3>Association & economic scope</h3><p>Statistical regimes do not identify causal mechanisms. OAS forecasting is not default calibration, trading profitability or portfolio loss modeling.</p></article>
+          <article><span>06</span><h3>Incomplete experiments</h3><p>XGBoost has no verified successful result. Six v2 implementation notebooks remain empty. Planned studies cannot be represented by historical model scores.</p></article>
         </div>
-      </Reveal>
-      <Reveal delay={80}>
-        <div className="mt-7 grid gap-4 sm:grid-cols-3">
-          <Note title="Stress is rare and clustered">
-            The macro-only index flags {stressMonths} of 250 months, and they arrive in three tight
-            clusters rather than spread evenly. Any model averaging across all months is mostly
-            learning the quiet ones.
-          </Note>
-          <Note title="The link is not constant">
-            Switch the lower panel to <em>Correlation</em> and pick any indicator: the rolling
-            correlation swings across zero. There is no single stable coefficient to estimate.
-          </Note>
-          <Note title="Fit arrives late">
-            With <em>Model fit</em> selected, the low point is {monthLabel(R2_MIN.d)} at{' '}
-            {num(R2_MIN.r2!, 2)} — immediately before the largest credit event in the sample.
-          </Note>
-        </div>
-      </Reveal>
-    </Section>
-  )
+        <details className="technical"><summary>Research agenda: explicitly not yet run</summary><div className="technical-body"><ol className="pending-list"><li><b>Matched regime ablation.</b> Give baselines and models the same latest-spread information; estimate the incremental contribution of regimes.</li><li><b>Frozen-threshold event forecasting.</b> Distinguish occupancy, at-risk origins and new entries; evaluate false alarms and missed events.</li><li><b>Dependent-data uncertainty.</b> Quantify paired error differences with methods that respect serial dependence and overlapping outcomes.</li><li><b>Historical vintages.</b> Reconstruct availability and revision timing.</li><li><b>External or later-period validation.</b> Test a frozen specification beyond the inspected sample.</li></ol><Source path="research/paper_preparation/08_RESULTS_REGISTER.md">Completed versus pending results register</Source></div></details>
+      </Chapter>
+      <Chapter id="technical" number="08" kicker="Technical details" title="A traceable path from artifact to claim.">
+        <p className="section-lede">The interface exports and visualizes existing evidence. It does not train models, generate live forecasts or fill missing prediction artifacts.</p>
+        <div className="pipeline"><span>Source CSVs</span><b>→</b><span>Documented transformations</span><b>→</b><span>Stored outputs</span><b>→</b><span>Checked export</span><b>→</b><span>Scoped interpretation</span></div>
+        <div className="research-grid"><div><h3>Evidence map & source register</h3><p>The inventory separates verified descriptions, reproduced forecasts, historical compromised results, unsuccessful attempts and proposed work.</p><div className="source-links"><Source path="web/EVIDENCE_MAP.md">Read the evidence map</Source><Source path="research/paper_preparation/04_VERIFIED_FINDINGS.md">Verified findings</Source><Source path="research/paper_preparation/08_RESULTS_REGISTER.md">Results register</Source><a href={`${import.meta.env.BASE_URL}evidence/manifest.json`} target="_blank" rel="noreferrer">Source hashes and snapshot manifest ↗</a></div></div><div><h3>Reproduce the presentation</h3><pre><code># Python environment with NumPy + pandas<br/>python3 web/scripts/export_research.py<br/>cd web<br/>npm ci<br/>npm run typecheck<br/>npm run build</code></pre><p className="source-note">The exporter reads existing artifacts and verifies their alignment and metrics. It never executes original notebooks or fits models. Model regeneration requires its own documented environment and validation protocol.</p></div></div>
+        <details className="technical"><summary>Corrected or omitted website claims</summary><div className="technical-body"><ul><li>The original RF R² ≈ 0.8084 remains historical, with target leakage disclosed.</li><li>Removed a universal three-month predictability limit and claims of reliable crisis warning.</li><li>Replaced “repricing speed” with within-month range and removed unsupported causal explanations.</li><li>Replaced “point-in-time” with lag approximations on revised data.</li><li>Kept the GDP code name while correcting its economic label to Euro Area 19.</li><li>Excluded old hard-coded performance and significance claims from the primary evidence layer.</li><li>Retained successful original model experiments separately from corrected forecast comparisons.</li></ul><Source path="web/EVIDENCE_MAP.md">Audit decisions</Source></div></details>
+        <p className="source-note">Source artifacts, including frozen notebook snapshots, open locally. External FRED catalog links require a connection. The original notebooks remain frozen. Evidence is exploratory unless explicitly labeled otherwise.</p>
+      </Chapter>
+    </main>
+    <footer><a className="wordmark" href="#top">M/C <span>Macroeconomic Regime Analysis</span></a><p>A research portfolio in economic data, modeling and statistical judgment.</p><a href={sourceHref('web/EVIDENCE_MAP.md')}>Evidence first ↗</a></footer>
+  </>
 }
 
-function Note({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg border border-rule bg-paper p-4">
-      <div className="mb-1.5 text-[0.82rem] font-semibold text-ink">{title}</div>
-      <p className="text-2xs leading-relaxed text-ink-mute">{children}</p>
-    </div>
-  )
-}
-
-/* -------------------------------------------------------------- findings */
-
-function TakeawayGroup({ icon, title, color, children }: {
-  icon: string; title: string; color: string; children: React.ReactNode
-}) {
-  return (
-    <div className="rounded-xl border border-rule bg-paper p-5 sm:p-6">
-      <div className="mb-3 flex items-center gap-2.5">
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm ${color}`}>{icon}</span>
-        <h3 className="text-[0.95rem] font-semibold text-ink">{title}</h3>
-      </div>
-      <div className="space-y-3 text-[0.85rem] leading-relaxed text-ink-soft">{children}</div>
-    </div>
-  )
-}
-
-function Takeaways() {
-  return (
-    <Reveal>
-      <div className="mb-14 rounded-2xl border border-rule bg-paper-warm p-6 sm:p-8">
-        <div className="mb-6">
-          <div className="eyebrow mb-2 text-signal">The short version</div>
-          <h3 className="text-[1.25rem] font-bold text-ink sm:text-[1.5rem]">
-            Three things you need to know
-          </h3>
-          <p className="mt-2 max-w-2xl text-[0.88rem] leading-relaxed text-ink-mute">
-            26 years of macro data, one credit spread, and a model that looked great until we asked the right question.
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          <TakeawayGroup icon="1" title="The model doesn't beat doing nothing" color="bg-signal-soft text-signal-deep">
-            <p>
-              <strong className="font-semibold text-ink">Just using last month's spread beats the macro model by 82%.</strong>{' '}
-              The model's R² of 0.75 looks good — until you compare it to the right baseline instead of a useless one.
-            </p>
-            <p>
-              Why? Credit spreads move <em>before</em> macro data, not after. The model is predicting the fast thing from the slow thing.
-            </p>
-            <p className="text-2xs text-ink-faint">Findings 1 & 2 below</p>
-          </TakeawayGroup>
-
-          <TakeawayGroup icon="2" title="Macro only matters when it's already bad" color="bg-gold-soft text-gold">
-            <p>
-              <strong className="font-semibold text-ink">In calm times, macro explains 7% of spread moves. In crises, 50%.</strong>{' '}
-              The relationship works like a switch, not a dial — and the model fits <em>worst</em> right before a crisis hits.
-            </p>
-            <p>
-              A single pooled model is mostly learning from months where its inputs carry almost no signal.
-            </p>
-            <p className="text-2xs text-ink-faint">Findings 3 & 4 below</p>
-          </TakeawayGroup>
-
-          <TakeawayGroup icon="3" title="Short-term stress flags work; forecasts don't" color="bg-calm-soft text-calm">
-            <p>
-              <strong className="font-semibold text-ink">"Will credit be stressed in 1–3 months?" is answerable (94% AUC). 12 months out? Coin flip.</strong>{' '}
-              The useful product is a short-horizon warning, not a spread forecast.
-            </p>
-            <p>
-              Also, monthly averaging hid March 2020 — the fastest credit event in 26 years — ranking it 43rd instead of 1st.
-            </p>
-            <p className="text-2xs text-ink-faint">Findings 5 & 6 below</p>
-          </TakeawayGroup>
-        </div>
-      </div>
-    </Reveal>
-  )
-}
-
-function Findings() {
-  const [showDetails, setShowDetails] = useState(false)
-
-  return (
-    <Section id="findings" className="scroll-mt-14 py-16 sm:py-24">
-      <SectionHead
-        eyebrow="What the data tells us"
-        title="Six findings, in the order that changed my mind"
-        lede="Each one survived at least two robustness checks — differencing for stationarity, point-in-time alignment, sample splits, dropping crisis years, or alternative model families. Where a check failed, that is stated."
-        className="mb-4"
-      />
-
-      <Takeaways />
-
-      <div className="mb-8 flex items-center gap-4">
-        <button
-          onClick={() => setShowDetails((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-lg border border-rule bg-paper px-4 py-2 text-[0.85rem] font-medium text-ink-soft transition-colors hover:bg-paper-warm hover:text-ink"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden
-               className="shrink-0 transition-transform duration-300 ease-smooth"
-               style={{ transform: showDetails ? 'rotate(45deg)' : 'none' }}>
-            <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          {showDetails ? 'Hide detailed findings' : 'Show detailed findings'}
-        </button>
-        <span className="text-2xs text-ink-faint">Charts, evidence and methodology for each finding</span>
-      </div>
-
-      {showDetails && (<>
-      <Insight
-        index={1}
-        question="Is an R² of 0.81 actually good?"
-        headline="The model that looked like R² = 0.75 is 82% worse than assuming nothing changes"
-        numbers={[
-          { value: '0.61pp', label: 'Random-walk RMSE — the bar to clear' },
-          { value: '−2.30', label: 'Model R² measured against that benchmark' },
-          { value: 'p < 0.0001', label: 'Diebold–Mariano, macro-only vs random walk' },
-        ]}
-        chart={<BenchmarkChart />}
-        interpretation={
-          <>On an honest walk-forward test, predicting next month's spread with this month's value scores
-          R² = 0.92. The random forest reaches 0.75 — respectable against the test mean, but far behind the
-          naive rule. (The original project reported 0.81 on a single chronological split; re-run across 14
-          walk-forward origins with point-in-time macro it gives 0.75. The gap between those two is not the
-          point — the gap to 0.92 is.) The result survives predicting the change instead of the level,
-          horizons of 1, 3, 6 and 12 months, and Ridge in place of random forest.</>
-        }
-        matters={
-          <>R² against the test-period mean flatters any model on a series with 0.96 autocorrelation, because
-          the null it beats is one no forecaster would ever use. The original number was never
-          miscalculated — it was compared to the wrong thing. Every downstream conclusion inherited that.</>
-        }
-        implication={
-          <>Make a named benchmark mandatory in reporting: quote R² against the random walk with a
-          Diebold–Mariano p-value, never R² alone. It is a reporting-standard change that costs nothing
-          and would have caught this at the outset.</>
-        }
-        limitation={
-          <>This shows macro adds nothing <em>at these horizons, in this specification, for this spread's
-          level</em>. It does not show macro is uninformative — Finding 3 shows it is, contemporaneously,
-          under stress. Nor does it rule out richer inputs like VIX or the yield curve.</>
-        }
-      />
-
-      <Insight
-        index={2}
-        question="Why can't the model beat a naive rule?"
-        headline="The credit spread moves before the macro data, not after it"
-        numbers={[
-          { value: '0 of 6', label: 'Indicators that lead the spread, in both sample halves' },
-          { value: 'p = 0.108', label: 'Unemployment → spread. The reverse is p < 0.0001' },
-          { value: '12 / 5 / 15', label: 'Months of warning the spread gave before each recession' },
-        ]}
-        chart={
-          <div className="space-y-12">
-            <LeadLagChart />
-            <div className="border-t border-rule pt-10"><WarningChart /></div>
-          </div>
-        }
-        interpretation={
-          <>Correlation between macro changes and spread changes peaks at a lead of −1 month: the spread has
-          already moved. Granger tests show spread changes predict unemployment and sentiment, while the
-          reverse is not significant. Under real-time publication-lag alignment the asymmetry strengthens.</>
-        }
-        matters={
-          <>This explains Finding 1 mechanically. The spread is a market price set daily by people
-          forecasting the economy; CPI and unemployment are backward-looking statistics published weeks
-          after the month they describe. The project asked the slow series to anticipate the fast one.</>
-        }
-        implication={
-          <>Invert the framing. Use the spread as a leading indicator <em>of</em> macro deterioration — which
-          the data supports — rather than as the thing macro predicts. That is both a more defensible
-          product and a more useful one.</>
-        }
-        limitation={
-          <>Granger precedence is predictive, not causal: it says the spread moves first, not that it causes
-          the move. Both may respond to a common unobserved driver. For CPI, Fed Funds and industrial
-          production the relationship is significant in <em>both</em> directions — the defensible claim is
-          the asymmetry, not exclusivity.</>
-        }
-      />
-
-      <Insight
-        index={3}
-        question="Does macro matter at all, then?"
-        headline="Macro explains credit spreads only when the economy is already under stress"
-        numbers={[
-          { value: '0.07 → 0.50', label: 'R² in calm months versus stressed ones' },
-          { value: '83%', label: `Of all spread variation, in ${Math.round(regimeSplit.monthShare * 100)}% of months` },
-          { value: '22 of 23', label: 'NBER recession months the macro-only index flags' },
-        ]}
-        chart={<RegimeSplitChart />}
-        interpretation={
-          <>Split by a stress index built from macro indicators alone, the six series jointly explain 7% of
-          monthly spread changes in calm periods and 50% in stressed ones. Every indicator strengthens —
-          CPI's correlation goes from −0.04 to −0.49. It behaves like a switch rather than a dial.</>
-        }
-        matters={
-          <>A single pooled model is fitted mostly on months where its inputs carry almost no information,
-          then judged on an average dominated by months it rarely sees. That is the mechanism behind the
-          project's unstable results, and it reframes what the macro block is for: describing the state,
-          not predicting the level.</>
-        }
-        implication={
-          <>Report calm and stress separately rather than as one headline, and route them to different
-          logic — lean on spread dynamics in calm regimes, weight macro more heavily in stressed ones.
-          Make the regime label itself a monitored indicator.</>
-        }
-        limitation={
-          <>The split sits at the 75th percentile of a constructed index — a choice, though the result holds
-          at the 70th and 80th too. This is contemporaneous association: macro and spreads moving together
-          in a crisis does not establish which drives which.</>
-        }
-      />
-
-      <Insight
-        index={4}
-        question="When does the relationship actually hold?"
-        headline="The macro model fits worst right before a crisis and best right after one"
-        numbers={[
-          { value: '0.099', label: `Lowest rolling R² in 26 years — ${monthLabel(R2_MIN.d)}` },
-          { value: '+13.6pp', label: 'How far the spread widened over the next seven months' },
-          { value: '−0.26', label: 'Correlation of model fit with the spread 12 months later' },
-        ]}
-        chart={
-          <div>
-            <div className="mb-5 rounded-lg border border-calm/25 bg-calm-soft/40 p-4">
-              <p className="text-[0.85rem] leading-relaxed text-ink-soft">
-                This finding lives in the timeline above. Set the lower panel to{' '}
-                <strong className="font-semibold text-ink">Model fit</strong> and select the{' '}
-                <strong className="font-semibold text-ink">Global financial crisis</strong> period: the five
-                worst-fitting months (▾) cluster in the calm immediately before the spike, and the five best
-                (▴) land after COVID had already repriced.
-              </p>
-              <a href="#timeline"
-                 className="mt-3 inline-flex items-center gap-1.5 text-2xs font-semibold text-calm transition-colors hover:text-ink">
-                Back to the timeline
-                <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden>
-                  <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1.5"
-                        strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <FitCard tone="signal" label="Five worst-fit months"
-                       months="Nov 2007 – Aug 2008" note="The eve of the global financial crisis." />
-              <FitCard tone="moss" label="Five best-fit months"
-                       months="Mar 2020 – Feb 2021" note="After COVID had already repriced credit." />
-            </div>
-          </div>
-        }
-        interpretation={
-          <>Rolling 60-month fit bottoms at 0.099 in May 2008 and peaks at 0.763 in April 2020. It
-          correlates +0.33 with the spread nine months <em>earlier</em> and −0.26 with the spread twelve
-          months later — the signature of a lagging indicator.</>
-        }
-        matters={
-          <>It challenges the assumption that a well-fitting model is a safe one. Deteriorating fit was the
-          closest thing to an advance warning here, and improving fit meant the damage was already done. A
-          team watching model health in 2008 would have seen R² collapse and filed a retraining ticket.</>
-        }
-        implication={
-          <>Track rolling R² as a monitored risk indicator with an inverted reading — a sustained fall is
-          grounds for escalation, not for retraining. It costs nothing to compute and would have fired in
-          late 2007.</>
-        }
-        limitation={
-          <>Two crisis episodes drive this. A formal sup-Wald test <strong className="font-semibold">cannot
-          reject</strong> parameter stability (6.11 against a ~17.5 critical value), so this is cyclical
-          variation in fit, not a proven structural break — and a 60-month window mechanically inflates R²
-          for years after a crisis enters it.</>
-        }
-      />
-
-      <Insight
-        index={5}
-        question="Is there a version of this question the data can answer?"
-        headline="Credit stress is predictable three months out, and not at all at twelve"
-        numbers={[
-          { value: '0.94 → 0.54', label: 'Classification AUC, 1 month versus 12 months ahead' },
-          { value: '4.4×', label: 'Precision lift over the base rate at one month' },
-          { value: '0.43', label: 'Macro-only AUC at 12 months — below a coin flip' },
-        ]}
-        chart={<HorizonChart />}
-        interpretation={
-          <>Asking "will the spread be in its top quartile in h months" instead of "what number will it be"
-          produces a genuinely useful model at short horizons — AUC 0.94 at one month, 0.79 at three. Then
-          it dies. Spread history alone beats macro-plus-spread at every horizon.</>
-        }
-        matters={
-          <>It converts a negative result into a scoped deliverable. The useful artefact is a short-horizon
-          stress flag, not a spread forecast — and it defines the honest planning horizon. Anyone setting
-          limits twelve months out on this data is using noise.</>
-        }
-        implication={
-          <>Ship the one-to-three-month classifier with an explicit "no signal beyond three months" caveat
-          and drop point forecasts. Where a longer view is genuinely needed, that is a case for new data,
-          not a longer horizon on this data.</>
-        }
-        limitation={
-          <>Positives are scarce and clustered — 20 to 31 across 164 test months, concentrated in a handful
-          of episodes — so these AUCs carry wide intervals and rest on three crises. AUC also says nothing
-          about calibration: the model ranks well, but its probabilities are not yet trustworthy as levels.</>
-        }
-      />
-
-      <Insight
-        index={6}
-        question="Was the data itself set up to see a crisis?"
-        headline="Monthly averaging erased the fastest credit event in twenty-six years"
-        numbers={[
-          { value: '1st vs 43rd', label: 'March 2020 ranked by repricing speed vs by monthly mean' },
-          { value: '13.6×', label: "That month's range against a median month" },
-          { value: '6,679', label: 'Daily observations in the repo; 309 monthly rows modelled' },
-        ]}
-        chart={<AggregationChart />}
-        interpretation={
-          <>March 2020's daily spread ran from 4.75pp to 10.87pp — a wider intra-month range than any month
-          of the global financial crisis. In the monthly panel the project models, it is the 43rd-worst
-          month. The averaging destroys precisely the event a credit-risk system exists to catch.</>
-        }
-        matters={
-          <>A risk system is judged on the fast, severe tail, and this aggregation compresses exactly that:
-          5% understatement in a slow month like October 2002, 28% in March 2020. Speed is the discarded
-          dimension, and speed separates a manageable widening from a liquidity event.</>
-        }
-        implication={
-          <>Carry intra-month range and month-end alongside the mean — three cheap columns from data already
-          in the repository — and treat range as its own monitored indicator of repricing velocity. It
-          would have ranked March 2020 first in real time.</>
-        }
-        limitation={
-          <>Month-end predicting next month's mean better is partly definitional: it sits closer in time. It
-          shows the mean target is artificially smooth, not that month-end is a better target. The macro
-          series remain monthly regardless, so this improves the outcome measure, not the alignment.</>
-        }
-      />
-      </>)}
-    </Section>
-  )
-}
-
-function FitCard({ tone, label, months, note }: {
-  tone: 'signal' | 'moss'; label: string; months: string; note: string
-}) {
-  const cls = tone === 'signal'
-    ? 'border-signal/25 bg-signal-soft/40' : 'border-moss/25 bg-moss-soft/40'
-  const txt = tone === 'signal' ? 'text-signal-deep' : 'text-moss'
-  return (
-    <div className={`rounded-lg border p-4 ${cls}`}>
-      <div className={`eyebrow mb-2 ${txt}`}>{label}</div>
-      <div className="text-[0.95rem] font-semibold text-ink">{months}</div>
-      <p className="mt-1 text-2xs leading-relaxed text-ink-mute">{note}</p>
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------ methodology */
-
-function Methodology() {
-  return (
-    <Section id="method" tone="warm" className="scroll-mt-14 border-y border-rule py-16 sm:py-24">
-      <SectionHead
-        eyebrow="Method"
-        title="How this was tested"
-        lede="Enough detail to reproduce the results, kept out of the narrative above. Everything was computed in Python; this page renders those outputs and derives nothing in the browser."
-      />
-      <div className="mt-9 grid gap-3 lg:grid-cols-2">
-        <Disclose summary="Data, provenance and publication lags">
-          <p className="mb-3">
-            Six monthly macro series from FRED plus one OECD reference series, merged with the ICE BofA US
-            High Yield option-adjusted spread on a month-end key. 309 complete months, Dec 1996 – Aug 2022,
-            no missing values and no gaps in the monthly grid.
-          </p>
-          <p className="mb-3">
-            The original merge applied <strong className="font-semibold text-ink">no publication lag</strong>,
-            which hands a forecaster standing at month end that month's CPI, industrial production and
-            unemployment — none of which had been published. Every forecasting test here shifts each series
-            by its real release lag:
-          </p>
-          <ul className="mb-3 space-y-1">
-            {MACRO_KEYS.map((k) => (
-              <li key={k} className="flex justify-between gap-3 text-2xs">
-                <span>{MACRO_META[k].label}</span>
-                <span className="shrink-0 font-mono text-ink-faint">
-                  {MACRO_META[k].lag === 0 ? 'same month' : `+${MACRO_META[k].lag}mo`}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p>
-            These lags are rounded down, so they understate rather than overstate the problem. The vintages
-            are also final revised series, so even correct lags do not fully reconstruct what a forecaster
-            would have seen in real time.
-          </p>
-        </Disclose>
-
-        <Disclose summary="Stationarity and why everything is tested on changes">
-          <p className="mb-3">
-            ADF and KPSS tests agree that four of the seven series — CPI, Fed Funds, industrial production
-            and consumer sentiment — are non-stationary in levels. Correlating non-stationary levels risks
-            spurious regression, so every correlation, Granger test and rolling diagnostic here runs on
-            first differences.
-          </p>
-          <p>
-            This matters for effective sample size too. The spread's <em>level</em> has lag-1 autocorrelation
-            of 0.963, leaving roughly 6 independent observations in 309 months; differencing recovers about
-            149. What differencing cannot create is a fourth crisis.
-          </p>
-        </Disclose>
-
-        <Disclose summary="Walk-forward validation, embargo and benchmarks">
-          <p className="mb-3">
-            The original evaluation used a single chronological split. This review uses expanding-window
-            walk-forward validation with 14 origins from 2009 to 2022, refitting every 12 months, with a
-            3-month embargo dropping training rows whose features overlap the test block.
-          </p>
-          <p className="mb-3">Three benchmarks, because a model has to beat something named:</p>
-          <ul className="mb-3 space-y-1.5">
-            <li><strong className="font-semibold text-ink">Random walk</strong> — next month equals this month. The one that wins.</li>
-            <li><strong className="font-semibold text-ink">AR(1) in levels</strong> — fitted on the training block only.</li>
-            <li><strong className="font-semibold text-ink">Training mean</strong> — the honest constant, unlike the test mean plain R² uses.</li>
-          </ul>
-          <p>
-            Comparisons use Campbell–Thompson out-of-sample R² and Diebold–Mariano with the
-            Harvey–Leybourne–Newbold small-sample correction, which matters at 163 test months.
-          </p>
-        </Disclose>
-
-        <Disclose summary="Regime construction and robustness checks">
-          <p className="mb-3">
-            The stress index averages four z-scored macro signals: a Sahm-style rise in unemployment off its
-            12-month low, negative industrial-production growth, sentiment below its 60-month norm, and the
-            OECD growth series inverted. It uses{' '}
-            <strong className="font-semibold text-ink">no credit-spread information</strong>, so conditional
-            correlations are not circular. Stress is the top quartile of that index.
-          </p>
-          <p className="mb-3">External validation: it flags 22 of the 23 NBER recession months inside its
-            window, which opens in Nov 2001 because of the 60-month lookback.</p>
-          <p>Each finding was re-run: excluding 2008–09 and 2020, under point-in-time alignment, on both
-            sample halves, and with alternative model families. The lead-lag asymmetry strengthens under
-            real-time alignment; outside crises the macro–credit link largely disappears in both directions.</p>
-        </Disclose>
-      </div>
-
-      <div className="mt-6 rounded-lg border border-rule bg-paper p-5">
-        <div className="eyebrow mb-3">Tools</div>
-        <p className="text-[0.82rem] leading-relaxed text-ink-soft">
-          Python with pandas, statsmodels, scikit-learn and scipy for the analysis; matplotlib for the
-          static figures in the repository. This page is React, TypeScript and D3 scales, rendering
-          pre-computed JSON. Scripts live in{' '}
-          <span className="font-mono text-2xs text-ink">/analysis</span>, and the full written review in{' '}
-          <span className="font-mono text-2xs text-ink">ANALYSIS_REPORT.md</span>.
-        </p>
-      </div>
-    </Section>
-  )
-}
-
-/* ----------------------------------------------------------------- limits */
-
-function Limits() {
-  const items = [
-    {
-      title: 'This is credit pricing, not credit loss',
-      body: 'There are no loans, borrowers, balances or default labels here. The spread is what lenders charge for risk, not what they lose. Nothing on this page transfers directly to borrower-level default modelling.',
-    },
-    {
-      title: 'Association and precedence, never causation',
-      body: 'Granger tests establish which series moves first, not what drives what. Six correlated aggregates with no exogenous variation cannot support a causal claim, and both series may respond to a common unobserved driver.',
-    },
-    {
-      title: 'Three recessions carry the regime evidence',
-      body: 'Every regime finding rests on 2001, 2008 and 2020. The row count is 309, but the episode count is three, and that is the binding constraint on confidence.',
-    },
-    {
-      title: 'No structural break was proven',
-      body: 'A sup-Wald test cannot reject parameter stability (6.11 against ~17.5). Finding 4 describes cyclical variation in how well the relationship holds — it is not evidence of a permanent regime change.',
-    },
-    {
-      title: 'Thresholds shown are in-sample choices',
-      body: 'The 6.43pp stress line and the suggested R² escalation level were set on the full sample. In production both would have to be fitted on training data alone, which will move them.',
-    },
-    {
-      title: 'One series is not what its name says',
-      body: 'The column labelled GDP is an OECD reference series for Euro Area 19, interpolated monthly from quarterly data — not US GDP. It is among the strongest correlates in the panel, so the label affects any economic reading.',
-    },
-  ]
-  return (
-    <Section id="limits" className="scroll-mt-14 py-16 sm:py-24">
-      <SectionHead
-        eyebrow="Limitations"
-        title="What this analysis does not establish"
-        lede="These are load-bearing, not boilerplate. Each one marks a place where a confident-sounding conclusion would outrun the evidence."
-      />
-      <div className="mt-9 grid gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((it, i) => (
-          <Reveal key={it.title} delay={i * 40}>
-            <div className="border-t border-rule-strong pt-4">
-              <h3 className="text-[0.88rem] font-semibold leading-snug text-ink">{it.title}</h3>
-              <p className="mt-2 text-[0.82rem] leading-relaxed text-ink-mute">{it.body}</p>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-/* ------------------------------------------------------------------- next */
-
-function NextSteps() {
-  const steps = [
-    {
-      n: '01',
-      title: 'Test daily financial variables that have no publication lag',
-      body: 'The core problem is that macro data arrives after the spread has moved. VIX, the 10y–2y term spread and the Chicago Fed NFCI are published daily or weekly and are plausibly contemporaneous with credit repricing. The specific test: do they beat the random walk on the same walk-forward setup where macro failed?',
-      tag: 'Directly tests why Finding 2 happens',
-    },
-    {
-      n: '02',
-      title: 'Reverse the model and forecast the macro from the spread',
-      body: 'Granger tests already point this way. Build the mirror of the failing model — predict unemployment and industrial production three to six months ahead from spread dynamics, benchmarked against each series\' own AR model. If the spread beats those benchmarks, the project has a working product rather than a negative result.',
-      tag: 'Turns the finding into a deliverable',
-    },
-    {
-      n: '03',
-      title: 'Rebuild the panel at daily and weekly frequency for the spread',
-      body: 'The daily series is already in the repository. Reconstruct the target as month-end plus intra-month range and realised volatility, then re-run Finding 5\'s classifier. The question is whether repricing velocity predicts stress persistence better than the level does — which the March 2020 ranking suggests it might.',
-      tag: 'Uses data already on hand',
-    },
-    {
-      n: '04',
-      title: 'Validate the regime split on out-of-sample history',
-      body: 'Three episodes is the binding constraint. BAMLH0A0HYM2 begins in 1996, but Moody\'s Baa–Aaa spread runs back to 1919 and covers roughly fifteen more credit cycles. Rebuilding the macro-only stress index on that history would show whether the 6.7× calm-to-stress ratio is a stable feature or an artefact of these three crises.',
-      tag: 'Addresses the biggest limitation',
-    },
-  ]
-  return (
-    <Section id="next" tone="sunk" className="scroll-mt-14 border-t border-rule py-16 sm:py-24">
-      <SectionHead
-        eyebrow="What next"
-        title="Four analyses that would move this forward"
-        lede="Each follows from a specific finding above and has a stated success criterion — not more data for its own sake."
-      />
-      <div className="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
-        {steps.map((s, i) => (
-          <Reveal key={s.n} delay={i * 60}>
-            <div className="flex gap-4">
-              <span className="tabular shrink-0 text-2xs font-semibold text-signal">{s.n}</span>
-              <div className="min-w-0">
-                <h3 className="text-[0.95rem] font-semibold leading-snug text-ink">{s.title}</h3>
-                <p className="mt-2 text-[0.85rem] leading-relaxed text-ink-soft">{s.body}</p>
-                <div className="mt-2.5"><Pill tone="neutral">{s.tag}</Pill></div>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-rule bg-paper py-10">
-      <div className="mx-auto w-full max-w-content px-5 sm:px-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
-          <p className="text-2xs leading-relaxed text-ink-mute">
-            Macroeconomic Regime Analysis &amp; Credit Risk — analytical review of 309 monthly observations,
-            Dec 1996 – Aug 2022.
-          </p>
-          <p className="text-2xs text-ink-faint">
-            Data: FRED · OECD · ICE BofA. Analysis in Python; page in React and D3.
-          </p>
-        </div>
-      </div>
-    </footer>
-  )
+function Finding({n,metric,label,title,body,source,href}: {n:string;metric:string;label:string;title:string;body:string;source:string;href:string}) {
+  return <article className="finding"><span className="finding-number">{n}</span><div><h3>{title}</h3><p>{body}</p><div className="finding-links"><Source path={source}>Evidence source</Source><a href={href}>Inspect result ↗</a></div></div><div className="finding-metric"><strong>{metric}</strong><span>{label}</span></div></article>
 }

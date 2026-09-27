@@ -126,7 +126,7 @@ export function Nav({ items }: { items: { id: string; label: string }[] }) {
         </a>
         <div className="-mx-1 flex flex-1 gap-0.5 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((i) => (
-            <a key={i.id} href={`#${i.id}`}
+            <a key={i.id} href={`#${i.id}`} aria-current={active === i.id ? 'location' : undefined}
                className={`shrink-0 rounded-md px-2.5 py-1 text-2xs font-medium transition-colors duration-200 ${
                  active === i.id ? 'bg-paper-sunk text-ink' : 'text-ink-mute hover:text-ink'}`}>
               {i.label}

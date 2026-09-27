@@ -1,0 +1,17 @@
+h,future_label_fix,score,threshold_source,n,positive_months,unknown_future_rows_scored,auc,average_precision
+1,False,rf_score,full_sample_exploratory_only,164,31,1,0.9354838709677419,0.828552510170105
+1,False,current_spread_score,full_sample_exploratory_only,164,31,1,0.9539170506912442,0.9001039354457074
+1,True,rf_score,full_sample_exploratory_only,163,31,0,0.9357282502443793,0.8290313065019823
+1,True,current_spread_score,full_sample_exploratory_only,163,31,0,0.9538123167155425,0.9001751503723561
+3,False,rf_score,full_sample_exploratory_only,164,29,3,0.7925925925925926,0.4515143694547163
+3,False,current_spread_score,full_sample_exploratory_only,164,29,3,0.8378033205619412,0.650523166629921
+3,True,rf_score,full_sample_exploratory_only,161,29,0,0.7938871473354231,0.4550263730131539
+3,True,current_spread_score,full_sample_exploratory_only,161,29,0,0.8369905956112852,0.6513708555609281
+6,False,rf_score,full_sample_exploratory_only,164,26,6,0.6564938684503902,0.24024858342094252
+6,False,current_spread_score,full_sample_exploratory_only,164,26,6,0.7547380156075808,0.48350456137005154
+6,True,rf_score,full_sample_exploratory_only,158,26,0,0.6592365967365968,0.24781690732211029
+6,True,current_spread_score,full_sample_exploratory_only,158,26,0,0.7511655011655012,0.4861820258743096
+12,False,rf_score,full_sample_exploratory_only,164,20,12,0.5425347222222222,0.1565031640330658
+12,False,current_spread_score,full_sample_exploratory_only,164,20,12,0.6892361111111112,0.2608828668318221
+12,True,rf_score,full_sample_exploratory_only,152,20,0,0.5301136363636364,0.16262345068579592
+12,True,current_spread_score,full_sample_exploratory_only,152,20,0,0.6704545454545454,0.2632670391716201

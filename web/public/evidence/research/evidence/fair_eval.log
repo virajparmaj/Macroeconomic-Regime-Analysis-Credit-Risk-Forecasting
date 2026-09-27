@@ -1,0 +1,19 @@
+=== FAIREST TEST: predict the CHANGE in spread. Random walk = predict 0. Model nests it. ===
+                        n  RMSE_Δ  RW_RMSE_Δ  R2_oos_vs_RW  DM_stat    DM_p
+model                                                                      
+RF  macro-only-Δ      163  0.8994     0.6124       -1.1569   4.8994  0.0000
+RF  macro+spread-Δ    163  0.8573     0.6124       -0.9595   4.6049  0.0000
+Ridge macro+spread-Δ  163  1.1412     0.6124       -2.4721   3.7917  0.0002
+
+  R2_oos_vs_RW > 0 means macro adds information beyond just knowing today's spread.
+
+
+=== Performance by regime, best model ===
+  CALM                     n=131  model RMSE=0.7355  RW RMSE=0.4850  R2_oos=-1.2998
+  STRESS (spread>=6.43)    n= 32  model RMSE=1.2365  RW RMSE=0.9734  R2_oos=-0.6137
+
+=== How big are the actual monthly changes the model must catch? ===
+  sd of Δspread in CALM  : 0.486
+  sd of Δspread in STRESS: 0.870
+  worst 1-month widening: +3.93 pp
+  worst 1-month tightening: -3.12 pp
