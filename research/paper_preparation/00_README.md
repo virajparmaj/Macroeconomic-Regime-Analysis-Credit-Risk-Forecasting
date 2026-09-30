@@ -19,11 +19,14 @@ Recommended project: **Persistence, Aggregation, and Incremental Regime Informat
 | [09_CONCLUSIONS_AND_LIMITATIONS.md](09_CONCLUSIONS_AND_LIMITATIONS.md) | Conclusions justified now and conditional conclusions after experiments |
 | [10_PAPER_BLUEPRINT.md](10_PAPER_BLUEPRINT.md) | Paper structure, preliminary abstract and figure specifications |
 | [11_REPRODUCIBILITY.md](11_REPRODUCIBILITY.md) | Reproduction commands, environment and release checklist |
+| [12_IMPLEMENTATION_PROMPT.md](12_IMPLEMENTATION_PROMPT.md) | Copy-ready coding prompt covering implementation, experiments, tests and PR delivery |
 
 The original broad [advisory](../RESEARCH_ADVISORY.md), [13-study literature review](../LITERATURE_REVIEW.md), and [experiment protocol](../EXPERIMENT_PROTOCOL.md) remain supporting material. This package narrows them into a practical study. The additional literature materially weakens any claim that the last-daily-observation benchmark itself is novel. The primary comparison is now explicitly the incremental contribution of regimes after macro and spread information, with the earlier macro-versus-spread comparison retained as secondary.
 
 Use **verified exploratory**, **planned**, **unverified**, and **conditional** consistently. A successful software test does not establish forecast skill. An already-inspected historical period is not an untouched confirmatory holdout. Freeze the protocol before the new runs, disclose that the historical sample informed the design, and reserve stronger confirmation for new data.
 
 ## Recommended next action
+
+Use [12_IMPLEMENTATION_PROMPT.md](12_IMPLEMENTATION_PROMPT.md) to start the implementation task. The prompt is an execution brief; its presence does not mean the experiments below have been run.
 
 Implement milestones M0–M3 in file 06: freeze the specification, reconstruct the data contract, enforce label maturity, and run the matched benchmark/model matrix. M4 adds dependent-data uncertainty and event analysis. M5 is a deliberately limited external validation. Write the final results and conclusion only from the resulting prediction ledger.

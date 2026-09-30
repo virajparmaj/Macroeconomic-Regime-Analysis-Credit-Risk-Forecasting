@@ -206,6 +206,9 @@ prompt-runs/
 *propt*.txt
 *propt*.json
 
+# Versioned research execution brief (other local prompts remain ignored).
+!research/paper_preparation/12_IMPLEMENTATION_PROMPT.md
+
 # Project data and local notes
 notes/
 data/
