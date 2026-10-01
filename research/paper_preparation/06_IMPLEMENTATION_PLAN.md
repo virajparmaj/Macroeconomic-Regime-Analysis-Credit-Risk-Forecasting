@@ -1,5 +1,7 @@
 # Ordered implementation plan
 
+> **Historical planning document.** Implementation details and the partial-month correction are recorded in [the executable study](../study/README.md) and its [decision log](../study/DECISIONS.md). Executed results belong in the [results register](08_RESULTS_REGISTER.md); proposed outcomes below are not evidence.
+
 **Planned work, not an implemented pipeline.** The paths below are proposed additions. Preserve existing notebooks and legacy outputs as historical evidence. Build reusable code first; notebooks should read the prediction ledger rather than own a second implementation.
 
 ## Milestones and acceptance gates

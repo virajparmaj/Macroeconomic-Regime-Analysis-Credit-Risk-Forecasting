@@ -1,5 +1,7 @@
 # Paper blueprint and preliminary writing
 
+> **Historical planning document.** Implementation details and the partial-month correction are recorded in [the executable study](../study/README.md) and its [decision log](../study/DECISIONS.md). Executed results belong in the [results register](08_RESULTS_REGISTER.md); proposed outcomes below are not evidence.
+
 ## Working title
 
 **Persistence, Aggregation, and Incremental Regime Information in U.S. High-Yield Spread Forecasting**

@@ -1,5 +1,7 @@
 # Data, provenance and validity
 
+> **Implementation correction, 30 September 2026:** stored completeness is not full-month source coverage. December 1996 and August 2022 each contain one daily spread observation. The study excludes these boundary months and uses January 1997–July 2022. Public FRED spread downloads now start in October 2023; external validation is separately labeled and preserves the intervening gap.
+
 ## Existing assets
 
 The merged panel has **309 months, December 1996–August 2022**, and no missing cells. This is a complete stored panel, not evidence that every value was observable at each historical forecast date. The daily HY spread source contains **6,679 nonmissing observations**. Input hashes and environment versions are in [audit_summary.json](../evidence/audit_summary.json).

@@ -12,3 +12,9 @@ This historical design was chosen after exploratory inspection, not preregistere
 - Sensitivities are one-at-a-time. Annual/window/target/delay/seed checks run the ridge/RF regime pair plus baselines. Threshold checks run all classification blocks; the five-macro historical check precedes external validation.
 - At most four workers, estimator/BLAS threads bounded to one, four-hour batches. Completed jobs are immutable atomic checkpoints; an interrupted active job is rerun rather than salvaged partially. In-flight jobs finish when the batch budget expires; no further jobs start.
 - Public artifacts contain aggregates and manifests. Detailed spread observations, prediction ledgers, alarms and source downloads remain local. No new affiliation is asserted.
+
+## Implementation organization and completion notes — 1 October 2026
+
+The planned regime component is the fold-local `Representation` class in `models.py`; keeping it with preprocessing avoids a second implementation. `runner.py` supplies orchestration and `python -m research.study` supplies the CLI planned as `run.py`. These are file-organization changes, not changes to the experimental contrasts.
+
+The free later-period source has missing macro observations that exclude November and December 2025, leaving 26/24 origins at horizons 1/3. These exclusions follow the frozen missingness rule. No later-period tuning or gap imputation was introduced. After the runs, completed-run resumption was made a no-op and covered by an immutability test; no forecasting calculation changed.

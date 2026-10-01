@@ -1,5 +1,7 @@
 # Research implementation prompt
 
+> **Historical planning document.** Implementation details and the partial-month correction are recorded in [the executable study](../study/README.md) and its [decision log](../study/DECISIONS.md). Executed results belong in the [results register](08_RESULTS_REGISTER.md); proposed outcomes below are not evidence.
+
 Prepared 30 September 2026. **Status: execution instructions for a future coding task. Adding this file does not implement or validate the research pipeline.**
 
 Copy the prompt below into a coding task opened in this repository. It is intended to carry the existing research plan through implementation, experiments, documentation and a pull request.

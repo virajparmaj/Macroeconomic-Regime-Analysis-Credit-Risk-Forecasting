@@ -364,3 +364,20 @@ def test_infinite_source_is_rejected(tmp_path):
     path.write_text("observation_date,X\n2020-01-01,inf\n")
     with pytest.raises(ValueError, match="Infinite"):
         read_series(path, "X")
+
+
+def test_completed_resume_does_not_rewrite_artifacts(tmp_path, monkeypatch):
+    import research.study.runner as module
+
+    frozen = dict(profile="core", code_hash="x", protocol={}, input_hashes={}, environment={})
+    out = tmp_path / "results/research/completed"
+    out.mkdir(parents=True)
+    (out / "manifest.json").write_text(json.dumps(frozen))
+    (out / "status.json").write_text(json.dumps({"complete": True, "batch_seconds": 42}))
+    (out / "predictions.csv").write_text("immutable original ledger\n")
+    before = {p.name: (p.read_bytes(), p.stat().st_mtime_ns) for p in out.iterdir()}
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    monkeypatch.setattr(module, "manifest", lambda profile: frozen)
+    assert module.execute(profile="core", resume="completed") == out
+    after = {p.name: (p.read_bytes(), p.stat().st_mtime_ns) for p in out.iterdir()}
+    assert after == before

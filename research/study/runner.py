@@ -311,6 +311,10 @@ def execute(profile="smoke", resume=None, workers=4, hours=4):
             for k in ["profile", "code_hash", "protocol", "input_hashes", "environment"]
         ):
             raise ValueError("Resume manifest mismatch; start a new run")
+        status_path = out / "status.json"
+        if status_path.exists() and json.loads(status_path.read_text()).get("complete"):
+            print(f"RESULT {out.name}: already complete; no files changed", flush=True)
+            return out
     else:
         run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:6]
         out = ROOT / "results/research" / run_id

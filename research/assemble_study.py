@@ -56,6 +56,7 @@ def assemble():
     influence = read_profile(registry, "core", "event_influence")
     covid = influence.loc[influence.deleted_event == "2020-03-31"].iloc[0]
     validation = json.loads((PUBLIC / "validation.json").read_text())
+    assert validation["notebooks"]["status"] == "passed"
     reproduction = json.loads((PUBLIC / "reproducibility.json").read_text())
     assert reproduction["passed"]
     selected = metrics.loc[(metrics.task == "level") & (metrics.horizon == 1)]
@@ -74,7 +75,7 @@ def assemble():
     interval = f"[{primary.lower_95:.2%}, {primary.upper_95:.2%}]"
     text = f"""# Persistence, Aggregation, and Incremental Regime Information in U.S. High-Yield Spread Forecasting
 
-**Executed empirical draft — 30 September 2026 (America/Chicago).** Historical results are exploratory. This is a research-note draft, not a claim of publication acceptance, causal identification or profitable trading.
+**Executed empirical draft — 1 October 2026 (America/Chicago); protocol frozen 30 September.** Historical results are exploratory. This is a research-note draft, not a claim of publication acceptance, causal identification or profitable trading.
 
 ## Abstract
 
@@ -132,17 +133,17 @@ No main-study alarm policy warns any of the three entries under the prespecified
 
 Sensitivity settings change one factor at a time. Seed results are robustness checks, not independent statistical replications. The delay scenario evaluates regression only because the current month's completed state is unavailable at its assumed month-end cutoff. The five-macro historical variant removes the discontinued Euro-area series before external evaluation.
 
-FRED's current free spread export begins October 2023, leaving a gap after the archived data. The later-period check freezes model parameters at July 2022, waits until seven contiguous months support spread features, and evaluates from April 2024 where outcomes exist. It does not interpolate the gap, refit on later outcomes or masquerade as a continuous September 2022 extension. Data are frozen through August 2026, the last complete target month permitted by the acquisition design. [FRED series notes](https://fred.stlouisfed.org/series/BAMLH0A0HYM2) document the three-year access window and redistribution terms.
+FRED's current free spread export begins October 2023, leaving a gap after the archived data. The later-period check freezes model parameters at July 2022, waits until seven contiguous months support spread features, and evaluates from April 2024 where outcomes exist. It does not interpolate the gap, refit on later outcomes or masquerade as a continuous September 2022 extension. Data are frozen through August 2026, the last complete target month permitted by the acquisition design. Missing inflation/unemployment features exclude November and December 2025. Consequently, the one-month panel has 26 origins through July 2026 and the three-month panel has 24 through May 2026; all models and baselines share these origins. [FRED series notes](https://fred.stlouisfed.org/series/BAMLH0A0HYM2) document the three-year access window and redistribution terms.
 
 {table(external, ['horizon','model','feature_block','n','rmse','mae','r2_vs_endpoint_persistence'])}
 
-The holdout uses the same index but a short later period, not an independent crisis sample. Vintage API requests were rejected without a configured FRED credential. No matched real-time-vintage experiment was completed; shifted revised data are not a substitute. Full continuity and vintage validation remain limitations.
+At one month the external learned models modestly outperform endpoint persistence, but adding regimes worsens ridge's error relative to the same macro model. At three months all learned models lose to endpoint persistence. These small samples do not establish stable gains. The holdout uses the same index but a short later period, not an independent crisis sample. Vintage API requests were rejected without a configured FRED credential. No matched real-time-vintage experiment was completed; shifted revised data are not a substitute. Full continuity and vintage validation remain limitations.
 
 ## 7. Reproducibility and limitations
 
 The delivered validation has {validation['tests_passed']} passing tests, including legacy checks, T01–T15 scientific-contract scenarios and the corrected symmetric-winsorization regression test. The original logging checks returned booleans that pytest did not enforce; assertion wrappers exposed a real validation bug, now fixed. All six reader notebooks execute from saved artifacts. A separate core run reproduces {reproduction['rows']} ledger rows and predictions within the declared tolerance (maximum absolute difference {reproduction['max_prediction_difference']:.3g}).
 
-Historical inputs and code/configuration/environment hashes identify each run. Atomic job checkpoints support resumption; mismatched manifests are rejected. Detailed licensed spread observations and prediction ledgers remain local. Public review artifacts contain aggregate metrics, manifests, tests and documentation. Software tests establish implementation properties, not forecast validity by themselves.
+Historical inputs and code/configuration/environment hashes identify each run. The repeat uses the same protocol and locked environment after equivalent orchestration/provenance refactoring; its distinct code hash and exact numerical agreement are disclosed in the reproduction record. Atomic job checkpoints support resumption; mismatched manifests are rejected and completed runs are unchanged. Detailed licensed spread observations and prediction ledgers remain local. Public review artifacts contain aggregate metrics, manifests, tests and documentation. Software tests establish implementation properties, not forecast validity by themselves.
 
 Limitations include a single index, revised macro data, assumed availability, rare entries, serial dependence, the historically informed design, model-family dependence, publication restrictions and the external gap. Regime labels are statistical representations, not identified economic causes. Spread prediction does not calibrate borrower default probabilities or establish investment returns.
 
@@ -163,7 +164,7 @@ The measured ridge regime improvement over the macro model is substantial as a p
     (PAPER / "13_EXECUTED_MANUSCRIPT.md").write_text(text)
     result_register = f"""# Executed results register
 
-Updated 30 September 2026. Numerical results are generated from versioned ledgers. See [the executed manuscript](13_EXECUTED_MANUSCRIPT.md) and [run registry](../study_results/latest_runs.json).
+Updated 1 October 2026. Numerical results are generated from versioned ledgers. See [the executed manuscript](13_EXECUTED_MANUSCRIPT.md) and [run registry](../study_results/latest_runs.json).
 
 | ID | Result | Status / artifact |
 |---|---|---|

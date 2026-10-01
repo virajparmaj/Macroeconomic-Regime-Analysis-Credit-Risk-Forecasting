@@ -1,10 +1,14 @@
 # Tests and scientific validation
 
-## Current status
+## Executed status — 1 October 2026
 
-The repository's existing pytest suite was rerun while preparing this folder. The captured outcome is in [validation_report.txt](validation_report.txt). These tests cover existing feature/split behavior; passing them does not certify target availability, vintage correctness, external validity or forecasting skill. Some split-test descriptions justify an embargo by feature overlap, which is not the appropriate general rationale for this forecasting design.
+**58 tests passed in 25.36 seconds** under Python 3.13.15. See [captured output](../study_results/tests.txt) and [machine-readable validation](../study_results/validation.json). The new behavioral suite is `tests/study/test_validity.py`; legacy tests remain included. Old logging checks now assert their outcomes, exposing and fixing a genuine symmetric-winsorization validation bug. No assertions were weakened.
 
-The earlier [audit summary](../evidence/audit_summary.json) records data identities, reconstruction error and notebook completeness. Classification and aggregation diagnostics are executed exploratory checks. The new paper pipeline and tests below are **planned**.
+All 72 core, 236 sensitivity, 16 external and 72 repeated-core jobs completed with zero model-failure rows. Independent verification recomputed 204 aggregate regression MSE values across those runs, checked unique keys, finite values, probability bounds, training-label maturity and entry risk sets. The core has 162 one-month and 160 three-month origins. The repeated run's 14,040 keys/actuals/predictions match exactly (maximum absolute difference 0; allowed rtol 1e-8, atol 1e-10).
+
+All six study readers execute. The main event analysis contains three entries; no main policy warns any. The suite checks future-data perturbation invariance, inner preprocessing isolation, alarm calibration isolation, manifest mismatch rejection, checkpoint resumption and completed-run immutability. Availability tests validate the implemented assumptions; they cannot validate missing historical vintage data.
+
+The earlier [validation report](validation_report.txt) is retained as an audit-period record, not the current release gate. Passing tests establishes software behavior, not forecasting skill.
 
 ## Required tests with meaningful failure cases
 
@@ -26,7 +30,7 @@ The earlier [audit summary](../evidence/audit_summary.json) records data identit
 | T14 | Event accounting | Consecutive alarms are one episode, one entry is not counted as several successes, at-risk time denominator is explicit |
 | T15 | Reproduction | Same manifest/seed gives identical keys and numerically matching predictions; changed data yields a changed manifest |
 
-Add these as behavioral tests around the new modules, not assertions that mirror implementation lines. Retain legacy tests for old behavior while clearly naming the new scientific contract. Tests on synthetic paths complement, rather than replace, inspection of real forecast ledgers.
+The table is the original acceptance contract. Its behavioral scenarios are implemented in `tests/study/test_validity.py`; T15 also uses `research/verify_study.py` on the completed core runs. T08 verifies as-of availability logic and the stated lag assumption, not unobserved historical releases. Synthetic tests complement independent inspection of real ledgers.
 
 ## Release gate
 
