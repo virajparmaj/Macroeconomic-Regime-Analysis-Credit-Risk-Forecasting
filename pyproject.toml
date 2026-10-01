@@ -11,7 +11,23 @@ dependencies = [
     "xgboost (>=2.1.4,<3.0.0)"
 ]
 
+[project.optional-dependencies]
+research = [
+    "numpy==2.4.1", "pandas==3.0.0", "scikit-learn==1.8.0",
+    "scipy>=1.14", "matplotlib>=3.9", "threadpoolctl>=3.2",
+    "pytest>=8", "nbclient>=0.10", "ipykernel>=6",
+    "structlog>=23", "colorama>=0.4", "seaborn>=0.13", "statsmodels>=0.14"
+]
+
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ["py313"]
+
+[tool.isort]
+profile = "black"
+line_length = 100

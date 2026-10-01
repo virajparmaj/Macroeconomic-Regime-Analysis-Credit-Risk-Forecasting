@@ -277,3 +277,6 @@ ai-usage.local.*
 
 # Optional isolated presentation-export environment
 .venv-web-evidence/
+
+# Private research ledgers include licensed per-observation spread values.
+/results/research/

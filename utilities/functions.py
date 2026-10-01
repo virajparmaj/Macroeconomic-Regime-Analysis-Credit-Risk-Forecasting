@@ -119,8 +119,10 @@ def winsorize_series(
         if series.empty:
             raise ValueError("Input Series is empty")
         
-        if not (0 <= limits[0] < limits[1] <= 0.5):
-            raise ValueError("Invalid limits: must be 0 <= lower < upper <= 0.5")
+        # These are fractions removed from each tail, not ordered quantile endpoints.
+        if (len(limits) != 2 or not all(0 <= value <= 0.5 for value in limits)
+                or sum(limits) >= 1):
+            raise ValueError("Invalid limits: each tail must be in [0, 0.5] and total below 1")
         
         initial_stats = {
             "mean": series.mean(),
