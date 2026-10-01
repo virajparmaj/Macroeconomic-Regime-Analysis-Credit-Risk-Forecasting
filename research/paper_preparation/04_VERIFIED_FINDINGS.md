@@ -1,5 +1,7 @@
 # Verified exploratory findings
 
+> **30 September 2026 correction:** the old 309-row diagnostics include December 1996 and August 2022, each represented by one daily spread observation. These archived results are not the corrected study. The implemented analysis excludes both, giving 307 complete target months and 162 one-month evaluation origins. See [the executed manuscript](13_EXECUTED_MANUSCRIPT.md) for the new results after execution.
+
 These are executed diagnostics from the existing analysis, not results of the planned matched regime study. The source artifacts are linked for each table. No new forecasting experiment was run while assembling this paper-preparation package.
 
 ## 1. Information in the benchmark

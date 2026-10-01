@@ -1,5 +1,7 @@
 # Macroeconomic Regime Analysis & Credit Risk Forecasting
 
+> **Executed research update (1 October 2026):** The reproducible study and measured findings are in [research/](research/README.md), with an [empirical draft](research/paper_preparation/13_EXECUTED_MANUSCRIPT.md). It corrects source identity and partial-month targets, uses matched benchmarks, and finds uncertain incremental regime value without beating endpoint persistence in the main historical test. The legacy overview below describes the original project; its early-warning and practical-use claims are not established by the new study.
+
 This project combines unsupervised learning and time series forecasting to detect economic regimes using macroeconomic indicators and predict credit risk (e.g., credit spreads). In simple terms, it tells us when the economy is expanding or contracting and forecasts how risky lending might become.
 
 ## Overview

@@ -1,0 +1,70 @@
+{
+  "retrieved_at": "2026-10-01T02:07:41.512427+00:00",
+  "sources": {
+    "BAMLH0A0HYM2": {
+      "status": "downloaded",
+      "first": "2023-10-02",
+      "last": "2026-09-29",
+      "rows": 793,
+      "sha256": "11190811c9fb8b0fc08cf2fcf7ef13bdee931347100334e2b6e4780a2513d5fe",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+    },
+    "CPIAUCSL": {
+      "status": "downloaded",
+      "first": "1947-01-01",
+      "last": "2026-08-01",
+      "rows": 956,
+      "sha256": "4e486503d2c2f6bb2180a9c568ee88852534a2da1dd178ab075887b2c196fb66",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL"
+    },
+    "INDPRO": {
+      "status": "downloaded",
+      "first": "1919-01-01",
+      "last": "2026-08-01",
+      "rows": 1292,
+      "sha256": "184063f9452b2608d6ea484d260a186ef81c57d4ee4d086c0f28619eb75124cc",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=INDPRO"
+    },
+    "FEDFUNDS": {
+      "status": "downloaded",
+      "first": "1954-07-01",
+      "last": "2026-08-01",
+      "rows": 866,
+      "sha256": "5aa734313c5930cb2213a640eadaf13762383f84da8e603a6c455ca3c5ed827c",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS"
+    },
+    "UNRATE": {
+      "status": "downloaded",
+      "first": "1948-01-01",
+      "last": "2026-08-01",
+      "rows": 944,
+      "sha256": "ffe86c903f6944ebc8281e5474a15fc4ceaac61059bc51ec86a7241391d8713d",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE"
+    },
+    "UMCSENT": {
+      "status": "downloaded",
+      "first": "1952-11-01",
+      "last": "2026-08-01",
+      "rows": 886,
+      "sha256": "27ce18aeda2ab875e799cf856913f95330bb6013fe75d8358c63a6f0c02a8e95",
+      "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UMCSENT"
+    }
+  },
+  "vintage": {
+    "CPIAUCSL": {
+      "status": "unavailable",
+      "reason": "HTTPError",
+      "credential_configured": false
+    },
+    "INDPRO": {
+      "status": "unavailable",
+      "reason": "HTTPError",
+      "credential_configured": false
+    },
+    "UNRATE": {
+      "status": "unavailable",
+      "reason": "HTTPError",
+      "credential_configured": false
+    }
+  }
+}

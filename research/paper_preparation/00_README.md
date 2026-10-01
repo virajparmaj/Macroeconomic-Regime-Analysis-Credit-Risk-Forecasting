@@ -1,6 +1,6 @@
 # Research paper preparation package
 
-Prepared 25 September 2026. **Status: verified exploratory evidence and implementation plan; the proposed paper experiments are not yet complete.**
+Updated 1 October 2026. **Status: historical study, sensitivity analysis, later-period holdout and empirical draft executed. Historical vintage validation remains unavailable.**
 
 Recommended project: **Persistence, Aggregation, and Incremental Regime Information in U.S. High-Yield Spread Forecasting.** The modest contribution is a controlled empirical assessment of how benchmark information and event definitions change conclusions about macroeconomic regime forecasts. It is not a new forecasting algorithm or a claim that the underlying evaluation principles are new.
 
@@ -19,11 +19,17 @@ Recommended project: **Persistence, Aggregation, and Incremental Regime Informat
 | [09_CONCLUSIONS_AND_LIMITATIONS.md](09_CONCLUSIONS_AND_LIMITATIONS.md) | Conclusions justified now and conditional conclusions after experiments |
 | [10_PAPER_BLUEPRINT.md](10_PAPER_BLUEPRINT.md) | Paper structure, preliminary abstract and figure specifications |
 | [11_REPRODUCIBILITY.md](11_REPRODUCIBILITY.md) | Reproduction commands, environment and release checklist |
+| [12_IMPLEMENTATION_PROMPT.md](12_IMPLEMENTATION_PROMPT.md) | Original execution brief retained for scope traceability |
+| [13_EXECUTED_MANUSCRIPT.md](13_EXECUTED_MANUSCRIPT.md) | Generated empirical draft with actual tables, uncertainty and limitations |
 
 The original broad [advisory](../RESEARCH_ADVISORY.md), [13-study literature review](../LITERATURE_REVIEW.md), and [experiment protocol](../EXPERIMENT_PROTOCOL.md) remain supporting material. This package narrows them into a practical study. The additional literature materially weakens any claim that the last-daily-observation benchmark itself is novel. The primary comparison is now explicitly the incremental contribution of regimes after macro and spread information, with the earlier macro-versus-spread comparison retained as secondary.
 
 Use **verified exploratory**, **planned**, **unverified**, and **conditional** consistently. A successful software test does not establish forecast skill. An already-inspected historical period is not an untouched confirmatory holdout. Freeze the protocol before the new runs, disclose that the historical sample informed the design, and reserve stronger confirmation for new data.
 
-## Recommended next action
+## Delivered study
 
-Implement milestones M0–M3 in file 06: freeze the specification, reconstruct the data contract, enforce label maturity, and run the matched benchmark/model matrix. M4 adds dependent-data uncertainty and event analysis. M5 is a deliberately limited external validation. Write the final results and conclusion only from the resulting prediction ledger.
+Start with [13_EXECUTED_MANUSCRIPT.md](13_EXECUTED_MANUSCRIPT.md), [08_RESULTS_REGISTER.md](08_RESULTS_REGISTER.md) and [11_REPRODUCIBILITY.md](11_REPRODUCIBILITY.md). The [run registry](../study_results/latest_runs.json) identifies the 72-job core, 236-job sensitivity, 16-job external and 72-job repeated-core runs. All complete without model failures. The test suite passes 58 tests, and all six study notebooks execute.
+
+The primary regime MSE gain is 39.36%, with a 95% interval of −7.92% to 55.79%, versus ridge with the same macro information. It does not outperform endpoint persistence. All main calibrated alarm policies miss the three entries. These are exploratory empirical findings, not evidence of a generally successful warning system.
+
+Earlier diagnostics and planning documents remain for traceability. Where they differ, the complete-month correction, frozen [protocol](../study/protocol.json), [decision log](../study/DECISIONS.md) and executed manuscript govern the delivered results. No institutional affiliation is asserted.

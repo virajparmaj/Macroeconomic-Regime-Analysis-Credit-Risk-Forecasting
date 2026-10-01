@@ -1,0 +1,10 @@
+{
+  "first": "20261001T021109Z-947a55",
+  "repeat": "20261001T023825Z-9610b2",
+  "rows": 14040,
+  "rtol": 1e-08,
+  "atol": 1e-10,
+  "max_prediction_difference": 0.0,
+  "passed": true,
+  "note": "Same locked environment and frozen protocol. Between runs, orchestration/provenance and configuration plumbing were refactored; manifest code hashes differ. Predictions are exactly equal. A later completed-resume guard affects no forecasting calculations."
+}

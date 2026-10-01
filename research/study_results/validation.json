@@ -1,0 +1,80 @@
+{
+  "tests_passed": 58,
+  "tests_seconds": 25.36,
+  "test_command": "LOKY_MAX_CPU_COUNT=4 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest tests test_logging.py -q",
+  "python": "3.13.15",
+  "pip_check": "No broken requirements found.",
+  "runs": [
+    {
+      "run_id": "20261001T021109Z-947a55",
+      "profile": "core",
+      "rows": 14040,
+      "eligible": 13224,
+      "jobs": 72,
+      "model_failures": 0,
+      "independently_recomputed_metrics": 24,
+      "passed": true
+    },
+    {
+      "run_id": "20261001T022614Z-d43c7b",
+      "profile": "sensitivity",
+      "rows": 43076,
+      "eligible": 41140,
+      "jobs": 236,
+      "model_failures": 0,
+      "independently_recomputed_metrics": 140,
+      "passed": true
+    },
+    {
+      "run_id": "20261001T024151Z-f6c6a9",
+      "profile": "external",
+      "rows": 784,
+      "eligible": 400,
+      "jobs": 16,
+      "model_failures": 0,
+      "independently_recomputed_metrics": 16,
+      "passed": true
+    },
+    {
+      "run_id": "20261001T023825Z-9610b2",
+      "profile": "core",
+      "rows": 14040,
+      "eligible": 13224,
+      "jobs": 72,
+      "model_failures": 0,
+      "independently_recomputed_metrics": 24,
+      "passed": true
+    }
+  ],
+  "smoke_run": "20261001T020736Z-415fe4",
+  "notebooks": {
+    "status": "passed",
+    "count": 6,
+    "records": [
+      {
+        "path": "notebooks/v2/01_data_point_in_time.ipynb",
+        "seconds": 4.791300875003799
+      },
+      {
+        "path": "notebooks/v2/02_features_and_leakage_tests.ipynb",
+        "seconds": 1.160859833995346
+      },
+      {
+        "path": "notebooks/v2/03_baselines_first.ipynb",
+        "seconds": 0.8924164170020958
+      },
+      {
+        "path": "notebooks/v2/04_regimes_real_time.ipynb",
+        "seconds": 2.0771736669994425
+      },
+      {
+        "path": "notebooks/v2/05_walk_forward_models.ipynb",
+        "seconds": 0.7634795000049053
+      },
+      {
+        "path": "notebooks/v2/06_results_and_limits.ipynb",
+        "seconds": 0.8396145829901798
+      }
+    ]
+  }
+}

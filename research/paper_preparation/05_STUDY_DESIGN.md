@@ -1,5 +1,7 @@
 # Study design to freeze before implementation
 
+> **Historical planning document.** Implementation details and the partial-month correction are recorded in [the executable study](../study/README.md) and its [decision log](../study/DECISIONS.md). Executed results belong in the [results register](08_RESULTS_REGISTER.md); proposed outcomes below are not evidence.
+
 Status: proposed specification. Historical data have already been inspected, so this is not retrospective preregistration.
 
 ## Forecast origin and targets
